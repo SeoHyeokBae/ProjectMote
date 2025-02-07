@@ -72,11 +72,6 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
-<<<<<<< HEAD
-=======
-
 # custom
 Content/*
 Plugins/*
-
->>>>>>> ad4ddc0 (~Section 5)
