@@ -70,7 +70,7 @@ void APlayerCharacter::BeginPlay()
 		mCameraZoomHandler.BindDynamic(this, &ThisClass::ZoomInByAiming);
 		mZoomComponent->AddInterpFloat(mCameraZoomCurve, mCameraZoomHandler);
 
-		mAimComponent->SetVisibility(false);
+		mAimDecalComponent->SetVisibility(false);
 	}
 
 	// PlayerController Edit
@@ -180,7 +180,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 		FVector NewLocation = GetMesh()->GetComponentLocation();
 		GetCapsuleComponent()->SetWorldLocation(NewLocation + GetMesh()->GetUpVector() * 93.f);
 		GetMesh()->SetEnableGravity(false);
-		GetMesh()->AddForce(mGravityDir * 100000.f);
+		GetMesh()->AddForce(GetGravityDirection() * 100000.f);
 	}
 
 
@@ -279,7 +279,7 @@ void APlayerCharacter::RotationAction(const FInputActionValue& Value)
 	FVector Axis = Value.Get<FVector>();
 
 	if (Axis.Y > 0.1f || Axis.Y < -0.1f) mIsLookUpCamera = true;	else mIsLookUpCamera = false;
-	if (Axis.X > 2.f || Axis.X < -2.f) mIsTrunCamera	= true;		else mIsTrunCamera = false;
+	if (Axis.X > 0.1f || Axis.X < -0.1f) mIsTrunCamera	= true;		else mIsTrunCamera = false;
 
 	float PitchDelta = Axis.Y * 45.0 * GetWorld()->GetDeltaSeconds();
 	float YawDelta = Axis.X * 45.0 * GetWorld()->GetDeltaSeconds();
@@ -294,12 +294,17 @@ void APlayerCharacter::RotationAction(const FInputActionValue& Value)
 	else if (mCameraRotator.Pitch > 85.f)
 		mCameraRotator.Pitch = 85.f;
 
+	if(mIsTrunCamera)
+		mLastTargetSystemDir = Axis.X;
+
 	// Lock-On 중일떄 카메라 고정
 	if (mTargetingSystem->IsLockOnTarget() == false || (mTargetingSystem->IsDynamicLockOnTarget() == true && !mIsReadyChangeTarget))
 	{
 		mArm->SetRelativeRotation(mCameraRotator);
 		GetController()->SetControlRotation(FRotator(0, mCameraRotator.Yaw, 0));
 	}
+
+		
 }
 
 void APlayerCharacter::AttackAction()
@@ -419,10 +424,10 @@ void APlayerCharacter::AimAction()
 
 		if (bHit)
 		{
-			mAimComponent->SetVisibility(true);
-			mAimComponent->SetMaterial(0, mAimMtrlInstDynamic);
+			mAimDecalComponent->SetVisibility(true);
+			mAimDecalComponent->SetMaterial(0, mAimMtrlInstDynamic);
 
-			// 현재: 몬스터 타켓시 Red, 수정한다면: 돌진 불가능한곳을 Red
+			// 조준한 곳에 몬스터가 위치할시 Red색상
 			AAIMonsterBase* HitActor = Cast<AAIMonsterBase>(HitResult.GetActor());
 			HitActor != nullptr ? mAimMtrlInstDynamic->SetVectorParameterValue(TEXT("Color"), FVector4(100.0, 1.0, 1.0, 1.0))
 								: mAimMtrlInstDynamic->SetVectorParameterValue(TEXT("Color"), FVector4(1.0, 1.0, 100.0, 1.0));
@@ -430,7 +435,7 @@ void APlayerCharacter::AimAction()
 			FVector CursorLocation = HitResult.Location;
 			FRotator CursorRotation = FRotationMatrix::MakeFromX(HitResult.ImpactNormal).Rotator();
 
-			mAimComponent->SetWorldLocationAndRotation(CursorLocation, CursorRotation);
+			mAimDecalComponent->SetWorldLocationAndRotation(CursorLocation, CursorRotation);
 
 			mAnimInstance->SetTargetDir((CursorLocation - GetActorLocation()).GetSafeNormal());
 		}
@@ -455,7 +460,7 @@ void APlayerCharacter::AimActionCanceled()
 	if (!mAnimInstance->GetIsFloat())
 		return;
 	
-	mAimComponent->SetVisibility(false);
+	mAimDecalComponent->SetVisibility(false);
 	
 	ZoomOut();
 	GetWorldSettings()->SetTimeDilation(1.f);
@@ -471,7 +476,7 @@ void APlayerCharacter::AimActionCompleted()
 	if (!mAnimInstance->GetIsFloat())
 		return;
 	
-	mAimComponent->SetVisibility(false);
+	mAimDecalComponent->SetVisibility(false);
 
 	ZoomOut();
 	GetWorldSettings()->SetTimeDilation(1.f);
@@ -505,12 +510,21 @@ void APlayerCharacter::ExecuteLockOnAction()
 				mTargetingSystem->HoldTargetLockOn();
 		}
 	}
+	// 락온된 타켓이 있을 경우
 	else
 	{
+		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("dir : %f"), mLastTargetSystemDir));
+		mIsReadyChangeTarget = true;
 		AAIMonsterBase* Monster = Cast<AAIMonsterBase>(mTargetingSystem->GetTarget());
 		if (Monster->mMonsterInfoKey == FName(TEXT("Golem")))
 		{
-			mTargetingSystem->HoldTargetLockOff();
+			mTargetingSystem->CancelLockOnTarget();
+			//mTargetingSystem->HoldTargetLockOff();
+		}
+		else if (mIsReadyChangeTarget && mLastTargetSystemDir != 0.0f)
+		{
+				mIsReadyChangeTarget = false;
+				mTargetingSystem->ChangeLockOnTargetForTurnValue(mLastTargetSystemDir);
 		}
 		else
 		{
@@ -522,9 +536,9 @@ void APlayerCharacter::ExecuteLockOnAction()
 void APlayerCharacter::BossKill()
 {
 	if (!mTargetingSystem->GetTarget()) return;
-	FDamageEvent	DmgEvent;
-	mTargetingSystem->GetTarget()->TakeDamage(100, DmgEvent, GetController(), this);
-	//mState->SetHP(10.f);
+	//FDamageEvent	DmgEvent;
+	//mTargetingSystem->GetTarget()->TakeDamage(100, DmgEvent, GetController(), this);
+	mState->SetHP(10.f);
 }
 
 void APlayerCharacter::ShowGuide()
@@ -811,7 +825,7 @@ void APlayerCharacter::ZoomIn()
 void APlayerCharacter::ZoomOut()
 {
 	mIsZoom = false;
-	mAimComponent->SetVisibility(false);
+	mAimDecalComponent->SetVisibility(false);
 
 	FInputModeGameOnly InputMode; // Capture Mouse In Vieport 
 	GetController<APlayerController>()->bShowMouseCursor = false;
@@ -832,8 +846,7 @@ void APlayerCharacter::ZoomInByAiming(float Alpha)
 
 void APlayerCharacter::UpdateCameraView(float DeltaTime)
 {
-	if (mIsZoom)
-		return;
+	if (mIsZoom || !mTargetingSystem->IsDynamicLockOnTarget()) return;
 
 	if (!mTargetingSystem->GetTarget())
 	{
@@ -986,7 +999,6 @@ void APlayerCharacter::HitInteraction()
 {
 }
 
-
 void APlayerCharacter::HitStopStart()
 {
 	FTimerHandle TimerHandle;
@@ -1086,7 +1098,7 @@ void APlayerCharacter::Create()
 	mZoomComponent = CreateDefaultSubobject<UTimelineComponent>(TEXT("ZoomTimeline"));
 	
 	mStaminaComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("StaminaWidget"));
-	mAimComponent = CreateDefaultSubobject<UDecalComponent>(TEXT("TargetAim"));
+	mAimDecalComponent = CreateDefaultSubobject<UDecalComponent>(TEXT("TargetAim"));
 
 	mTargetingSystem = CreateDefaultSubobject<UTargetSystemComponent>(TEXT("TargetingSystem"));
 

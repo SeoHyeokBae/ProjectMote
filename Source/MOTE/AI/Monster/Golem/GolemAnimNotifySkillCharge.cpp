@@ -63,7 +63,7 @@ void UGolemAnimNotifySkillCharge::Notify(USkeletalMeshComponent* MeshComp, UAnim
 					float ExplosionStrength = 3500.0f;
 
 					FVector LaunchDirection = Direction;
-					if (player->GetPlanetGravityDir() != FVector(0.0f, 0.0f, -1.0f))
+					if (player->GetGravityDirection() != FVector(0.0f, 0.0f, -1.0f))
 					{
 						float PlayerHeight = abs(FVector::DotProduct(player->GetActorLocation(), player->GetGravityDirection()));
 						float ImpactHeight = abs(FVector::DotProduct(Hit.ImpactPoint, player->GetGravityDirection()));
@@ -72,7 +72,7 @@ void UGolemAnimNotifySkillCharge::Notify(USkeletalMeshComponent* MeshComp, UAnim
 						{
 							ExplosionStrength = 2500.f;
 							float DeltaHeight = ImpactHeight - PlayerHeight;
-							LaunchDirection = (player->GetActorLocation() - (DeltaHeight + 25.f) * player->GetPlanetGravityDir() - Hit.ImpactPoint).GetSafeNormal();
+							LaunchDirection = (player->GetActorLocation() - (DeltaHeight + 25.f) * player->GetGravityDirection() - Hit.ImpactPoint).GetSafeNormal();
 							LaunchDirection += Golem->GetActorForwardVector() * 0.5;
 						}
 					}

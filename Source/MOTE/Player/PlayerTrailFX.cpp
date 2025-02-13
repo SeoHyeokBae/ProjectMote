@@ -46,7 +46,9 @@ void APlayerTrailFX::OnDashActive()
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwner());
 	if (!Player)
+	{
 		return;
+	}
 
 	if (!IsValid(mDashFXComponent))
 	{
@@ -112,7 +114,7 @@ void APlayerTrailFX::OffShieldActive()
 		APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwner());
 		if(Player)
 		{
-			FRotator Rot = Player->GetPlanetGravityDir().Rotation() - FRotator(90.0, 0.0, 0.0);
+			FRotator Rot = Player->GetGravityDirection().Rotation() - FRotator(90.0, 0.0, 0.0);
 			UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 				Player->GetWorld(), mAfterExplosionEffect, Player->GetActorLocation(), Rot, FVector(14.0, 14.0, 14.0));
 		}

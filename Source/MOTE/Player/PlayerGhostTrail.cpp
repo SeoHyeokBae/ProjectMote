@@ -10,10 +10,9 @@ APlayerGhostTrail::APlayerGhostTrail()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	mGhostTrail = CreateDefaultSubobject<UPoseableMeshComponent>(TEXT("GhostTrail"));
-	RootComponent = mGhostTrail;
-	//mGhostTrail->SetupAttachment(RootComponent);
-	mGhostTrail->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -97.f), FRotator(0.f, 270.f, 0.f));
+	mPoseableMeshComponent = CreateDefaultSubobject<UPoseableMeshComponent>(TEXT("GhostTrail"));
+	RootComponent = mPoseableMeshComponent;
+	mPoseableMeshComponent->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -97.f), FRotator(0.f, 270.f, 0.f));
 
 	static ConstructorHelpers::FObjectFinder<UMaterialInstance>
 		Material(TEXT("/Script/Engine.MaterialInstanceConstant'/Game/Player/FX/MTI_GhostTrail.MTI_GhostTrail'"));
@@ -48,14 +47,14 @@ void APlayerGhostTrail::Tick(float DeltaTime)
 
 void APlayerGhostTrail::Init(USkeletalMeshComponent* SkeletalMeshComponent)
 {
-	mGhostTrail->SetSkeletalMesh(SkeletalMeshComponent->SkeletalMesh);
-	mGhostTrail->CopyPoseFromSkeletalComponent(SkeletalMeshComponent);
-	TArray<UMaterialInterface*> Mats = mGhostTrail->GetMaterials();
+	mPoseableMeshComponent->SetSkeletalMesh(SkeletalMeshComponent->SkeletalMesh);
+	mPoseableMeshComponent->CopyPoseFromSkeletalComponent(SkeletalMeshComponent);
+	TArray<UMaterialInterface*> Mats = mPoseableMeshComponent->GetMaterials();
 
 	for (int i = 0; i < Mats.Num(); ++i)
 	{
 		mMaterials.Add(UKismetMaterialLibrary::CreateDynamicMaterialInstance(GetWorld(), mMtrlInstance));
-		mGhostTrail->SetMaterial(i, mMaterials[i]);
+		mPoseableMeshComponent->SetMaterial(i, mMaterials[i]);
 	}
 
 	mFadeCountDown = mFadeOutTime;

@@ -268,7 +268,10 @@ void AAIMonsterBase::SelectedTarget(bool bFlag)
 			UUserWidget* MainWidget = PlayerController->GetMainWidget();
 			UUserWidget* MonsterInfoWidget = Cast<UUserWidget>(MainWidget->GetWidgetFromName(TEXT("UI_MonsterInfo")));
 			UMonsterInfoWidget* MonsterInfo = Cast<UMonsterInfoWidget>(MonsterInfoWidget);
-			MonsterInfo->SetTarget(this);
+			if (bFlag)
+				MonsterInfo->SetTarget(this);
+			else
+				MonsterInfo->ClearTarget();
 		}
 	}
 }

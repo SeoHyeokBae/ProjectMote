@@ -15,57 +15,57 @@ class MOTE_API APlayerCharacter : public ACharacter, public ICombatInterface, pu
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	USpringArmComponent* mArm;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	UCameraComponent*	mCamera;
 
 	FRotator mCameraRotator = FRotator::ZeroRotator;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Light)
 	USpotLightComponent* mLight;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Equipment)
 	USkeletalMeshComponent* mCloak_R;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Equipment)
 	USkeletalMeshComponent* mCloak_L;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Equipment)
 	class ABaseWeapon*		mWeapon;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = State)
 	class AMotePlayerState* mState; 
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Effect)
 	UArrowComponent*		mArrow;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Effect)
 	class APlayerTrailFX*	mTrailFX;
 
-	UPROPERTY(EditAnywhere) 
+	UPROPERTY(EditAnywhere, Category = Effect)
 	UParticleSystem* mDashExplosionEffect;
 
-	UPROPERTY(VisibleAnywhere)
-	UDecalComponent*			mAimComponent;
+	UPROPERTY(VisibleAnywhere, Category = Camera)
+	UDecalComponent*			mAimDecalComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	UMaterialInstance*			mAimMtrlInst;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	UMaterialInstanceDynamic*	mAimMtrlInstDynamic;
 	
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Widget)
 	UWidgetComponent*	mStaminaComponent;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Widget)
 	class UPlayerStaminaWidget* mStaminaWidget;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Effect)
 	UParticleSystem* mSpawnParticle;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = TargetSystem)
 	class UTargetSystemComponent* mTargetingSystem;
 
 	UPROPERTY(EditDefaultsOnly, Category = Material)
@@ -98,18 +98,18 @@ protected:
 	bool IsZoomSound = false;
 // 줌인줌아웃
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	TObjectPtr<class UTimelineComponent>	mZoomComponent;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Camera)
 	TObjectPtr<class UCurveFloat>			mCameraZoomCurve;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = Camera)
 	float mBlendTimeOnZoomIn = 0.125f;			// 줌인,아웃 시간
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = Camera)
 	float mFieldOfViewOnZoomIn = 110.f;			// 줌인했을 때 FOV 값
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = Camera)
 	float mTargetArmLenghtOnZoomIn = 250.f;		// 줌인했을 때 스프링암 길이
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = Camera)
 	FVector mSocketOffsetOnZoomIn = FVector(0.0,150.0,-120.0); // 줌인했을 때 소켓 위치
 	
 	// 기존값
@@ -141,11 +141,14 @@ protected:
 	bool mPressedInteraction = false;
 	bool mIsPuase = false;
 
+	// ChangeTarget 전용
+	float mLastTargetSystemDir = 0.f;
+
 	uint8 mTeamID = 1;
 
 	bool mIsLowHelth = false;
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	TArray<TSubclassOf<class UCameraShakeBase >> mCameraShake;
 	TObjectPtr<class UPlayerAnimInstance>	mAnimInstance;
 	
@@ -236,8 +239,6 @@ public:
 	UArrowComponent*		GetArrow() const { return mArrow; }
 	UWidgetComponent*		GetStaminaComponent() { return mStaminaComponent; }
 	ABaseWeapon*			GetWeapon() { return mWeapon; }
-	FVector					GetPlanetGravityDir() const { return mGravityDir; }
-	void					SetPlanetGravityDir(FVector Gravity) { mGravityDir = Gravity; }
 
 protected:
 	UFUNCTION()

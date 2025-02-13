@@ -10,14 +10,13 @@ class MOTE_API UCustomGravityComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+	friend class APlayerCharacter;
 public:	
 	UCustomGravityComponent();
-	friend class APlayerCharacter;
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	class APlayerCharacter* mPlayer;

@@ -65,34 +65,35 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 	//HitResults.Empty();
 	//TempHitResults.Empty();
 
-	// 라인 갯수 초기화
-	mCoord.SetNum(13);
-	mCoordDown.SetNum(13);
+	// 정점 갯수 초기화
+	mVertex.SetNum(VERTEX_COUNT);
+	mBottomVertex.SetNum(VERTEX_COUNT);
 	
-	// 정점세팅
-	mCoord[0] = Player->GetActorLocation();
-	mCoordDown[0] = Player->GetActorLocation() 
+	// 중점 위치
+	mVertex[0] = Player->GetActorLocation();
+	mBottomVertex[0] = Player->GetActorLocation() 
 					- FVector(0.0,0.0,Player->GetCapsuleComponent()->GetScaledCapsuleHalfHeight() -1);
 
+	// 각 정점 위치
 	float firstAngle = - (Angle / 2);
-	for (int32 i = 0; i < mCoord.Num() - 1; ++i)
+	for (int32 i = 0; i < mVertex.Num() - 1; ++i)
 	{
-		float AngleDegrees = firstAngle + Angle / (mCoord.Num() - 1) * i;
+		float AngleDegrees = firstAngle + Angle / (mVertex.Num() - 1) * i;
 		float AngleRadians = FMath::DegreesToRadians(AngleDegrees);
 		FVector Direction = Player->GetActorForwardVector() * FMath::Cos(AngleRadians) 
 							+ Player->GetActorRightVector() * FMath::Sin(AngleRadians);
-		mCoord[i + 1] = mCoord[0] + Direction * Distance;
-		mCoordDown[i + 1] = mCoordDown[0] + Direction * Distance;
+		mVertex[i + 1] = mVertex[0] + Direction * Distance;
+		mBottomVertex[i + 1] = mBottomVertex[0] + Direction * Distance;
 	}
 
 	// 정점연결 및 충돌 검사
-	for (int32 i = 0; i < mCoord.Num() - 1; ++i)
+	for (int32 i = 0; i < mVertex.Num() - 1; ++i)
 	{
-		FVector Start = mCoord[0];
-		FVector End = mCoord[i + 1];
+		FVector Start = mVertex[0];
+		FVector End = mVertex[i + 1];
 
-		FVector StartDown = mCoordDown[0];
-		FVector EndDown = mCoordDown[i + 1];
+		FVector StartDown = mBottomVertex[0];
+		FVector EndDown = mBottomVertex[i + 1];
 
 		// 외곽 연결
 		FCollisionQueryParams TraceParams;
@@ -101,7 +102,7 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 
 		if (i != 0)
 		{
-			FVector Prev = mCoord[i]; // 1일때 [i + 1 = 2] 와 [i = 1] 연결 
+			FVector Prev = mVertex[i]; // 1일때 [i + 1 = 2] 와 [i = 1] 연결 
 
 			bool bHitArc = Player->GetWorld()->LineTraceMultiByChannel(
 				TempHitResults,
@@ -118,7 +119,7 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 //#endif
 
 			 //아래
-			FVector PrevDown = mCoordDown[i]; // 1일때 [i + 1 = 2] 와 [i = 1] 연결 
+			FVector PrevDown = mBottomVertex[i]; // 1일때 [i + 1 = 2] 와 [i = 1] 연결 
 
 			bool bHitArcDown = Player->GetWorld()->LineTraceMultiByChannel(
 				TempHitResults,
@@ -171,9 +172,9 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 			{
 				if (!DamagedActors.Contains(HitActor))
 				{
-					Player->HitStopStart();
 					DamagedActors.Add(HitActor);
 
+					Player->HitStopStart();
 					FDamageEvent	DmgEvent;
 					FRotator RotOffset = FRotator::ZeroRotator;
 					float RandAgle = 0.f;

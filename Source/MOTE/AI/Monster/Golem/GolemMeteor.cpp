@@ -149,7 +149,7 @@ void AGolemMeteor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
 					DamagedActors.Add(Player);
 					FVector LaunchDirection;
 
-					if (Player->GetPlanetGravityDir() != FVector(0.0f, 0.0f, -1.0f))
+					if (Player->GetGravityDirection() != FVector(0.0f, 0.0f, -1.0f))
 					{
 						float PlayerHeight = abs(FVector::DotProduct(Player->GetActorLocation(), Player->GetGravityDirection()));
 						float ImpactHeight = abs(FVector::DotProduct(Hit.ImpactPoint, Player->GetGravityDirection()));
@@ -157,7 +157,7 @@ void AGolemMeteor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
 						if (PlayerHeight < ImpactHeight)
 						{
 							float DeltaHeight = ImpactHeight - PlayerHeight;
-							LaunchDirection = (Player->GetActorLocation() - (DeltaHeight + 15.f) * Player->GetPlanetGravityDir() - Hit.ImpactPoint).GetSafeNormal();
+							LaunchDirection = (Player->GetActorLocation() - (DeltaHeight + 15.f) * Player->GetGravityDirection() - Hit.ImpactPoint).GetSafeNormal();
 						}
 						else
 							LaunchDirection = (Player->GetActorLocation() - Hit.ImpactPoint).GetSafeNormal();
@@ -181,7 +181,7 @@ void AGolemMeteor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, 
 		}
 
 		AMotePlayerController* MoteController = Cast<AMotePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		FVector Dir = Cast<APlayerCharacter>(MoteController->GetCharacter())->GetPlanetGravityDir();
+		FVector Dir = Cast<APlayerCharacter>(MoteController->GetCharacter())->GetGravityDirection();
 
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), mExplosionFireFX, Hit.ImpactPoint - Dir * 10, Dir.Rotation() - FRotator(90.0, 0.0, 0.0), FVector(6.f, 6.f, 6.f));
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), mExplosionGroundFX, Hit.ImpactPoint - Dir * 10, Dir.Rotation() - FRotator(90.0, 0.0, 0.0), FVector(6.f, 6.f, 6.f));

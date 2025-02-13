@@ -70,7 +70,7 @@ void UGolemAnimNotifyAttackCollision::NotifyTick(USkeletalMeshComponent* MeshCom
 					{
 						FVector LaunchDirection;
 
-						if (HitPlayer->GetPlanetGravityDir() != FVector(0.0f, 0.0f, -1.0f))
+						if (HitPlayer->GetGravityDirection() != FVector(0.0f, 0.0f, -1.0f))
 						{
 							float PlayerHeight = abs(FVector::DotProduct(HitPlayer->GetActorLocation(), HitPlayer->GetGravityDirection()));
 							float ImpactHeight = abs(FVector::DotProduct(Hit.ImpactPoint, HitPlayer->GetGravityDirection()));
@@ -78,7 +78,7 @@ void UGolemAnimNotifyAttackCollision::NotifyTick(USkeletalMeshComponent* MeshCom
 							if (PlayerHeight < ImpactHeight)
 							{
 								float DeltaHeight = ImpactHeight - PlayerHeight;
-								LaunchDirection = (HitPlayer->GetActorLocation() - (DeltaHeight + 25.f) * HitPlayer->GetPlanetGravityDir() - Hit.ImpactPoint).GetSafeNormal();
+								LaunchDirection = (HitPlayer->GetActorLocation() - (DeltaHeight + 25.f) * HitPlayer->GetGravityDirection() - Hit.ImpactPoint).GetSafeNormal();
 								LaunchDirection += mGolem->GetActorForwardVector() * 0.5;
 							}
 							else

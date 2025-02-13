@@ -86,14 +86,9 @@ void ADmgTextActor::ChangeColor(FLinearColor NewColor)
 void ADmgTextActor::TimeLineUpdate(float Alpha)
 {
 	FVector NewLocation;
-	// 처음에 커브로했다가 x,y값도 커브에 영향을받아 원하는느낌이안남
-	// 그래서 커브는 1:1 선형그래프로하고 z값만 변경
-	//NewLocation = FMath::Lerp(StartLocation, EndLocation, Alpha);
 	NewLocation.X = FMath::Lerp(StartLocation.X, EndLocation.X, Alpha);
 	NewLocation.Y = FMath::Lerp(StartLocation.Y, EndLocation.Y, Alpha);
-
-	// 선형 그래프일때
-	NewLocation.Z = StartLocation.Z + FMath::Sin(Alpha * 3.14159f * 1.5f) * 60.f * 1.5f;
+	NewLocation.Z = StartLocation.Z + FMath::Sin(Alpha * PI * FREQUENCY) * AMPLITUDE;
 
 	SetActorLocation(NewLocation);
 }
@@ -102,4 +97,6 @@ void ADmgTextActor::TimeLineFinish()
 {
 	Destroy();
 }
-
+// 처음에 커브로했다가 x,y값도 커브에 영향을받아 원하는느낌이안남 (x,y는 1:1커브로 하고싶음)
+// 그래서 커브는 1:1 선형그래프로하고 z값만 변경
+//NewLocation = FMath::Lerp(StartLocation, EndLocation, Alpha);

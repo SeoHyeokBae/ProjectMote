@@ -40,7 +40,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTargetAimSystemComponent* mTargetAimSystem;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UWidgetComponent* mHPBarComponent;
 
 	UPROPERTY()

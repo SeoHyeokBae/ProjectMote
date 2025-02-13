@@ -6,6 +6,7 @@
 #include "../Controller/MotePlayerController.h"
 #include "Player/PlayerInfo.h"
 #include "../AI/AIMonsterBase.h"
+#include "../AI/Monster/TargetAimSystemComponent.h"
 
 UTargetSystemComponent::UTargetSystemComponent()
 {
@@ -25,10 +26,9 @@ UTargetSystemComponent::UTargetSystemComponent()
 	InterpSpeed = 5.0f;
 	LastTimeChangeTarget = 0.0f;
 	TimeSinceLastChangeTarget = 0.0f;
-	MinMouseValueToChangeTarget = 3.0f;
+	MinMouseValueToChangeTarget = 0.01f; // 마우스 회전 input값
 	MinDelayTimeToChangeTarget = 0.3f;
-	bAnalogNeutralSinceLastSwitchTarget = false;
-	MinAnalogValueToChangeTarget = 0.2f;
+	MinCancelToTarget = 3.f;
 
 }
 
@@ -55,7 +55,7 @@ void UTargetSystemComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 
 	UpdateCamera(DeltaTime);
-
+	UpdateDrawDebug();
 	//UpdateCamera(DeltaTime);
 
 	//if (bDrawDebug)
@@ -73,8 +73,8 @@ bool UTargetSystemComponent::IsDrawDebug() const
 void UTargetSystemComponent::UpdateDrawDebug()
 {
 	//// 탐지하는 범위를 드로우 디버그합니다.
-	//DrawDebugSphere(GetWorld(), mPlayerOwner->GetActorLocation(), DetectionRange,
-	//	DebugTargetSphereSegment, FColor::Green);
+	DrawDebugSphere(GetWorld(), mPlayerOwner->GetActorLocation(), DetectionRange,
+		DebugTargetSphereSegment, FColor::Green);
 
 	//// Target을 드로우 디버그합니다.
 	//if (IsValid(Target) == true)
@@ -82,7 +82,7 @@ void UTargetSystemComponent::UpdateDrawDebug()
 	//	AAIMonsterBase* Monster = Cast<AAIMonsterBase>(Target);
 	//	if (Monster)
 	//	{
-	//		DrawDebugSphere(GetWorld(), Monster->GetTargetAimLocation(),
+	//		DrawDebugSphere(GetWorld(), Cast<UTargetAimSystemComponent>(Monster->GetTargetAimSystem())->GetComponentLocation(),
 	//			DebugTargetSphereSize, DebugTargetSphereSegment, FColor::Red);
 	//	}
 	//}
@@ -148,7 +148,7 @@ void UTargetSystemComponent::ExecuteLockOnTarget()
 void UTargetSystemComponent::CancelLockOnTarget()
 {
 	DisableCameraLock();
-
+	if (bDynamicLockOnTarget) bDynamicLockOnTarget = false;
 	Target = nullptr;
 }
 
@@ -168,6 +168,12 @@ void UTargetSystemComponent::ChangeLockOnTargetForTurnValue(float TurnValue)
 	if (IsValid(Monster)&& Monster->GetAIType() != EAIType::Death)
 	{
 		Monster->SelectedTarget(false);
+	}
+
+	if (FMath::Abs(TurnValue) > MinCancelToTarget)
+	{
+		CancelLockOnTarget();
+		return;
 	}
 
 	TimeSinceLastChangeTarget = GetWorld()->GetRealTimeSeconds() - LastTimeChangeTarget;
@@ -643,7 +649,7 @@ FRotator UTargetSystemComponent::CalculateInterpToTarget(AActor* InterpToTarget)
 	if (IsValid(InterpToTarget) )
 	{
 		const FRotator PlayerControllerRotator = mPlayerController->GetControlRotation();
-		const FVector PlayerLocation = mPlayerOwner->GetActorLocation();
+		const FVector PlayerLocation = mPlayerOwner->GetActorLocation() + FVector(0.f,0.f,150.f);
 		const FVector TargetLocation = InterpToTarget->GetActorLocation();
 
 		// 2개의 위치 벡터를 입력하여 2번 째 인자의 위치 벡터를 바라보는 방향정보를 반환합니다.

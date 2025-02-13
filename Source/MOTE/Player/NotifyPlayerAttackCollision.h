@@ -9,6 +9,8 @@
 /**
  * 
  */
+#define VERTEX_COUNT 13
+
 UCLASS()
 class MOTE_API UNotifyPlayerAttackCollision : public UAnimNotify
 {
@@ -30,14 +32,14 @@ private:
 	TSet<class AActor*> DamagedEnvActors;
 
 	UPROPERTY()
-	TArray<FVector> mCoord;
+	TArray<FVector> mVertex;
 
 	UPROPERTY()
-	TArray<FVector> mCoordDown;
+	TArray<FVector> mBottomVertex;
 
 private:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
-	void CreateCollision(class APlayerCharacter* Player, float Angle = 270.f);
+	void CreateCollision(class APlayerCharacter* Player, float Angle = 210.f);
 
 
 	

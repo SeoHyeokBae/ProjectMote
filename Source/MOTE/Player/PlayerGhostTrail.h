@@ -25,7 +25,7 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	class UPoseableMeshComponent* mGhostTrail;
+	class UPoseableMeshComponent* mPoseableMeshComponent;
 
 	UMaterialInstance* mMtrlInstance;
 	TArray<UMaterialInstanceDynamic*> mMaterials;

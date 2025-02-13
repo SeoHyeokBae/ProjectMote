@@ -89,7 +89,7 @@ void UBTTask_SkillMeteor::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			// 위치와 회전 값 설정
 			FRotator Rotation = FRotator::ZeroRotator;
 			FVector TargetLocation = Player->GetActorLocation();
-			if (Player->GetPlanetGravityDir() != FVector(0.f, 0.f, -1.0f))
+			if (Player->GetGravityDirection() != FVector(0.f, 0.f, -1.0f))
 			{
 				TargetLocation += Player->GetActorUpVector() * 10000.0f;
 			}

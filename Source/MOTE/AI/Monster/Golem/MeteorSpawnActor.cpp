@@ -75,9 +75,9 @@ void AMeteorSpawnActor::SpawnRandomLocation()
 			if (MoteController)
 			{
 				APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(MoteController->GetCharacter());
-				if (PlayerCharacter->GetPlanetGravityDir() != FVector(0.f,0.f,-1.0f) )
+				if (PlayerCharacter->GetGravityDirection() != FVector(0.f,0.f,-1.0f) )
 				{
-					RandomLocation.Location += FVector((RandomLocation.Location - PlayerCharacter->GetPlanetGravityDir()).Normalize() * 5000.0f);
+					RandomLocation.Location += FVector((RandomLocation.Location - PlayerCharacter->GetGravityDirection()).Normalize() * 5000.0f);
 				}
 				else
 				{
@@ -117,9 +117,9 @@ void AMeteorSpawnActor::SpawnRandomLocationNoNav()
 	if (MoteController)
 	{
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(MoteController->GetCharacter());
-		if (PlayerCharacter->GetPlanetGravityDir() != FVector(0.f, 0.f, -1.0f))
+		if (PlayerCharacter->GetGravityDirection() != FVector(0.f, 0.f, -1.0f))
 		{
-			RandomLocation += FVector((PlayerCharacter->GetPlanetGravityDir()).Normalize());
+			RandomLocation += FVector((PlayerCharacter->GetGravityDirection()).Normalize());
 		}
 		else
 		{
