@@ -278,8 +278,8 @@ void APlayerCharacter::RotationAction(const FInputActionValue& Value)
 {
 	FVector Axis = Value.Get<FVector>();
 
-	if (Axis.Y > 0.1f || Axis.Y < -0.1f) mIsLookUpCamera = true;	else mIsLookUpCamera = false;
-	if (Axis.X > 0.1f || Axis.X < -0.1f) mIsTrunCamera	= true;		else mIsTrunCamera = false;
+	abs(Axis.Y) > 3.f ? mIsLookUpCamera = true : mIsLookUpCamera = false;
+	abs(Axis.X) > 3.f ? mIsTrunCamera = true : mIsTrunCamera = false;
 
 	float PitchDelta = Axis.Y * 45.0 * GetWorld()->GetDeltaSeconds();
 	float YawDelta = Axis.X * 45.0 * GetWorld()->GetDeltaSeconds();
@@ -294,11 +294,11 @@ void APlayerCharacter::RotationAction(const FInputActionValue& Value)
 	else if (mCameraRotator.Pitch > 85.f)
 		mCameraRotator.Pitch = 85.f;
 
-	if(mIsTrunCamera)
+	if(abs(Axis.X) > 0.01)
 		mLastTargetSystemDir = Axis.X;
 
-	// Lock-On 중일떄 카메라 고정
-	if (mTargetingSystem->IsLockOnTarget() == false || (mTargetingSystem->IsDynamicLockOnTarget() == true && !mIsReadyChangeTarget))
+	// Lock-On 중일떄 카메라 고정, 아래 들어오면 안됨
+	if (!mTargetingSystem->IsLockOnTarget() || mTargetingSystem->IsDynamicLockOnTarget())
 	{
 		mArm->SetRelativeRotation(mCameraRotator);
 		GetController()->SetControlRotation(FRotator(0, mCameraRotator.Yaw, 0));
@@ -494,7 +494,7 @@ void APlayerCharacter::ExecuteLockOnAction()
 		if (!mTargetingSystem->GetTarget())
 		{
 			mTargetingSystem->ExecuteLockOnTarget();
-			
+
 			// 타켓이 골렘일경우 바로 DynamicLock-On
 			if (mTargetingSystem->IsLockOnTarget())
 			{
@@ -513,7 +513,6 @@ void APlayerCharacter::ExecuteLockOnAction()
 	// 락온된 타켓이 있을 경우
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Cyan, FString::Printf(TEXT("dir : %f"), mLastTargetSystemDir));
 		mIsReadyChangeTarget = true;
 		AAIMonsterBase* Monster = Cast<AAIMonsterBase>(mTargetingSystem->GetTarget());
 		if (Monster->mMonsterInfoKey == FName(TEXT("Golem")))
@@ -846,7 +845,7 @@ void APlayerCharacter::ZoomInByAiming(float Alpha)
 
 void APlayerCharacter::UpdateCameraView(float DeltaTime)
 {
-	if (mIsZoom || !mTargetingSystem->IsDynamicLockOnTarget()) return;
+	if (mIsZoom) return;
 
 	if (!mTargetingSystem->GetTarget())
 	{
@@ -859,7 +858,7 @@ void APlayerCharacter::UpdateCameraView(float DeltaTime)
 		float NewLength = FMath::FInterpTo(mArm->TargetArmLength, DefaultArmLength, DeltaTime, 1.f);
 		mArm->TargetArmLength = NewLength;
 	}
-	else
+	else if(mTargetingSystem->IsDynamicLockOnTarget())
 	{
 		float Distance = FVector::Dist(GetActorLocation(), mTargetingSystem->GetTarget()->GetActorLocation());
 		float Ratio = FMath::Clamp(Distance / MaxCameraDist,  MinCameraDist / MaxCameraDist, 1.0f);

@@ -55,7 +55,7 @@ void UTargetSystemComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 
 	UpdateCamera(DeltaTime);
-	UpdateDrawDebug();
+	//UpdateDrawDebug();
 	//UpdateCamera(DeltaTime);
 
 	//if (bDrawDebug)
@@ -169,7 +169,8 @@ void UTargetSystemComponent::ChangeLockOnTargetForTurnValue(float TurnValue)
 	{
 		Monster->SelectedTarget(false);
 	}
-
+	
+	// 마우스 회전이 크면 종료
 	if (FMath::Abs(TurnValue) > MinCancelToTarget)
 	{
 		CancelLockOnTarget();
@@ -214,7 +215,7 @@ void UTargetSystemComponent::UpdateCameraLock()
 	{
 		if (IsValid(Target)&& mPlayerOwner->GetDistanceTo(Target) <= DetectionRange)
 		{
-			// Target이 살아있는 동안 카메라가 Target을 바라보도록 고정합니다.
+			// Target이 살아있는 동안 카메라가 Target을 바라보도록 고정
 			AAIMonsterBase* Monster = Cast<AAIMonsterBase>(Target);
 			if (IsValid(Monster)&& Monster->GetAIType() !=  EAIType::Death && mPlayerController)
 			{
@@ -224,7 +225,7 @@ void UTargetSystemComponent::UpdateCameraLock()
 			}
 			else
 			{
-				// Target이 사망했을 경우 다음 Target을 찾습니다.
+				// Target이 사망했을 경우 다음 Target
 				CancelLockOnTarget();
 				ExecuteLockOnTarget();
 			}
@@ -314,7 +315,7 @@ AActor* UTargetSystemComponent::FindTarget() const
 	float DistanceFromCenterOfViewport = 0.0f;
 	const FVector2D ViewportSize = GEngine->GameViewport->Viewport->GetSizeXY();
 
-	// 화면의 중앙에 가까운 액터를 찾아 NewTarget으로 설정합니다.
+	// 화면의 중앙에 가까운 액터를 찾아 NewTarget으로 설정
 	int32 ArrayIndex = 0;
 	for (AActor* TargetableActor : TargetableActors)
 	{
@@ -366,15 +367,15 @@ TArray<AActor*> UTargetSystemComponent::SearchTargetableActors(bool bInScreenPos
 					if (bInScreenPosition)
 					{
 						TTuple<FVector2D, bool> ActorScreenPosition = GetScreenPositionOfActor(HitedAI);
-						if (IsInViewport(ActorScreenPosition.Get<0>()) == true && ActorScreenPosition.Get<1>() == true)
+						if (IsInViewport(ActorScreenPosition.Get<0>()) && ActorScreenPosition.Get<1>())
 						{
-							// 중복되지 않게 TargetableActors Array에 추가합니다.
+							// 중복되지 않게 TargetableActors Array에 추가
 							TargetableActors.AddUnique(Cast<AActor>(Hit.GetActor()));
 						}
 					}
 					else
 					{
-						// 중복되지 않게 TargetableActors Array에 추가합니다.
+						// 중복되지 않게 TargetableActors Array에 추가
 						TargetableActors.AddUnique(Cast<AActor>(Hit.GetActor()));
 					}
 				}
@@ -391,13 +392,13 @@ AActor* UTargetSystemComponent::FindDirectionalTarget(ETargetDirection NewTarget
 	TArray<AActor*> TargetableActors = SearchTargetableActors();
 	const int32 CurrentTargetIndex = TargetableActors.Find(Target);
 
-	// 현재 Target이 TargetableActors 배열에 존재할 경우 배열에서 제거합니다.
+	// 현재 Target이 TargetableActors 배열에 존재할 경우 배열에서 제거
 	if (CurrentTargetIndex != INDEX_NONE)
 	{
 		TargetableActors.Remove(Target);
 	}
 
-	// 현재 Target을 기준으로 좌우에 있는 Target을 탐색합니다.
+	// 현재 Target을 기준으로 좌우에 있는 Target을 탐색
 	TArray<AActor*> LeftTargetableActors;
 	TArray<AActor*> RightTargetableActors;
 
@@ -596,6 +597,7 @@ float UTargetSystemComponent::CalculateDotProductToTarget(AActor* NewTargetableA
 	// LockOn일 경우
 	else
 	{
+		// UKismetMathLibrary::GetDirectionUnitVector(start,end) 방향단위벡터
 		const FVector TargetActorDirection = UKismetMathLibrary::GetDirectionUnitVector(GetOwner()->GetActorLocation(),
 			Target->GetActorLocation());
 		const FVector NewTargetableActorDirection = UKismetMathLibrary::GetDirectionUnitVector(GetOwner()->GetActorLocation(),
@@ -649,12 +651,12 @@ FRotator UTargetSystemComponent::CalculateInterpToTarget(AActor* InterpToTarget)
 	if (IsValid(InterpToTarget) )
 	{
 		const FRotator PlayerControllerRotator = mPlayerController->GetControlRotation();
-		const FVector PlayerLocation = mPlayerOwner->GetActorLocation() + FVector(0.f,0.f,150.f);
+		const FVector PlayerLocation = mPlayerOwner->GetActorLocation() + /* offset */FVector(0.f, 0.f, 150.f);
 		const FVector TargetLocation = InterpToTarget->GetActorLocation();
 
-		// 2개의 위치 벡터를 입력하여 2번 째 인자의 위치 벡터를 바라보는 방향정보를 반환합니다.
+		// 2개의 위치 벡터를 입력하여 2번 째 인자의 위치 벡터를 바라보는 방향정보를 반환
 		const FRotator LookAtTarget = UKismetMathLibrary::FindLookAtRotation(PlayerLocation, TargetLocation);
-		// 1번 째 인자에서 2번 째 인자로 회전 보간합니다.
+		// 1번 째 인자에서 2번 째 인자로 회전 보간
 		const FRotator RInterpToRotator = FMath::RInterpTo(PlayerControllerRotator, LookAtTarget,
 			GetWorld()->GetDeltaSeconds(), InterpSpeed);
 
