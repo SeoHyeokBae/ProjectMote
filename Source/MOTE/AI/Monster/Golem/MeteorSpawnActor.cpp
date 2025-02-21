@@ -63,7 +63,7 @@ void AMeteorSpawnActor::SpawnRandomLocation()
 		// FNavLocation.Location 
 		FNavLocation RandomLocation;
 
-		// 네비게이션 데이터가 있는지 확인합니다.
+		// 네비게이션 데이터가 있는지 확인
 		if (NavSystem->GetRandomReachablePointInRadius(BaseLocation, Radius, RandomLocation))
 		{
 			// 스폰 파라미터 설정

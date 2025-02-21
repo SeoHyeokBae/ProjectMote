@@ -223,10 +223,10 @@ void ALightElemental::Load()
 		GetMesh()->SetAnimInstanceClass(ElementalAnim.Class);
 
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem>
-		NiagaraDashAsset(TEXT("/Script/Niagara.NiagaraSystem'/Game/FX/SlashHitAndStabHit/Particles/Niagara/NS_ky_stabHit02.NS_ky_stabHit02'"));
+		NiagaraSlashAsset(TEXT("/Script/Niagara.NiagaraSystem'/Game/FX/SlashHitAndStabHit/Particles/Niagara/NS_ky_stabHit02.NS_ky_stabHit02'"));
 
-	if (NiagaraDashAsset.Succeeded())
-		mHitEffect = NiagaraDashAsset.Object;
+	if (NiagaraSlashAsset.Succeeded())
+		mHitEffect = NiagaraSlashAsset.Object;
 }
 
 void ALightElemental::Init()

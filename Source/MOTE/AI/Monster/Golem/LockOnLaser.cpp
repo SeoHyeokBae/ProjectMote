@@ -42,23 +42,23 @@ void ALockOnLaser::BeginPlay()
 	Super::BeginPlay();
 
 	mMesh->SetMaterial(0, mMtrlInstDynamic);
-
-	// 0.2 tick 마다 갱신
-	GetWorld()->GetTimerManager().SetTimer(DelayTimerHandle, this, &ALockOnLaser::UpdateLength, 0.2, true);
-	
 }
 
-void ALockOnLaser::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void ALockOnLaser::Tick(float Deltatime)
 {
-	Super::EndPlay(EndPlayReason);
+	Super::Tick(Deltatime);
 
-	// 타이머 클리어
-	GetWorld()->GetTimerManager().ClearTimer(DelayTimerHandle);
-	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+	UpdateLength(Deltatime);
 }
 
-void ALockOnLaser::UpdateLength()
+void ALockOnLaser::UpdateLength(float Deltatime)
 {
+	if (mStartTime < 0.4f)
+	{
+		mStartTime += Deltatime;
+		return;
+	}
+
 	FHitResult HitResult;
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);
@@ -66,7 +66,10 @@ void ALockOnLaser::UpdateLength()
 	FVector Start = mArrow->GetComponentLocation();
 	FVector End = Start + mArrow->GetForwardVector() * 15000.f;
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel12, CollisionParams);
-	float Length;
+	float Length = 0.f;
+	
+	mTotalAcc += Deltatime;
+
 	if (bHit)
 	{
 		Length = (HitResult.TraceStart - HitResult.Location).Length();
@@ -74,9 +77,7 @@ void ALockOnLaser::UpdateLength()
 		APlayerCharacter* Player = Cast<APlayerCharacter>(HitResult.GetActor());
 		if (Player)
 		{
-			float DeltaTime = (GetWorld()->GetDeltaSeconds()) / 0.2 * 5.f;
-			mTotalAcc += DeltaTime;
-			mLockOnAcc += DeltaTime;
+			mLockOnAcc += Deltatime;
 
 			if ((mLockOnAcc >= mLockOnTime) && !mIsFinish)
 			{
@@ -96,19 +97,11 @@ void ALockOnLaser::UpdateLength()
 			}
 		}
 	}
-	else
-	{
-		Length = (HitResult.TraceStart - HitResult.TraceEnd).Length();
 
-		float DeltaTime = (GetWorld()->GetDeltaSeconds()) / 0.2 * 5.f;
-		mTotalAcc += DeltaTime;
-		mMissTargetAcc += DeltaTime;
-		
-		mLockOnAcc = 0.f;
-		if (mLockOnAcc <= 0.f) 
-			mLockOnAcc = 0.f;
+		if(Length == 0.f)
+			Length = (HitResult.TraceStart - HitResult.TraceEnd).Length();
 
-		if ((mMissTargetAcc + mTotalAcc >= mMissTargetTime) && !mIsFinish)
+		if (mTotalAcc - mLockOnAcc >= mMissTargetTime && !mIsFinish)
 		{
 			mIsFinish = true;
 			mIsLockOn = false;
@@ -118,17 +111,13 @@ void ALockOnLaser::UpdateLength()
 				UGolemAnimInstance* Anim = Cast<UGolemAnimInstance>(Golem->GetMesh()->GetAnimInstance());
 				if (Anim)
 				{
-					GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, [this, Golem, Anim]()
-						{
-							Golem->SetGolemAnim(EGolemState::Skill_Lazer);
-							Destroy();
-						}, 0.7f, false);
+					Golem->SetGolemAnim(EGolemState::Skill_Lazer);
+					Destroy();
 				}
 			}
 		}
-	}
 
-	float Scale = Length / 200.f;
+	float Scale = Length / CylinerSize;
 	mMesh->SetRelativeScale3D(FVector(Scale, 0.9f, 0.9f));
 
 	float Red = DefaultColorParam * FMath::Clamp((mLockOnAcc * 2.f / (mLockOnTime * 0.9)), 0.0f, 2.0f);

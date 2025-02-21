@@ -113,6 +113,7 @@ void ASkillStone::Tick(float DeltaTime)
 			if (IsValid(PlayerController))
 			{
 				PlayerController->GetMainWidget()->mSkillStoneImage->SetVisibility(ESlateVisibility::Visible);
+				// UI ÀÌÆåÆ® Àç»ý
 				PlayerController->GetMainWidget()->mNiagaraWidget->GetNiagaraComponent()->SetAutoActivateParticle(true);
 				PlayerController->GetMainWidget()->mNiagaraStoneLight->GetNiagaraComponent()->SetAutoActivateParticle(true);
 

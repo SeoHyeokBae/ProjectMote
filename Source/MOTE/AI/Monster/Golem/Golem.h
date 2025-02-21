@@ -67,6 +67,8 @@ protected:
 	UPROPERTY()
 	TSet<UActorComponent*> mTSetEffects;
 
+	FVector mCrashHitPos;
+
 public:
 	EGolemState GetGolemState() const { return mState; }
 	void SetGolemState(EGolemState State) { mState = State; }
@@ -109,6 +111,9 @@ public:
 
 	bool GetCanSpawnMeteor();
 	void SetSpawnMeteor();
+
+	FORCEINLINE void SetCrashHitPos(FVector hitPos) { mCrashHitPos = hitPos; }
+	FORCEINLINE FVector GetCrashHitPos() const { return mCrashHitPos; }
 
 private:
 	void UpdateTargetDir();

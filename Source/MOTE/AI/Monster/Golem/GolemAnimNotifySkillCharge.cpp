@@ -88,7 +88,7 @@ void UGolemAnimNotifySkillCharge::Notify(USkeletalMeshComponent* MeshComp, UAnim
 					float Distance = FVector::Dist(Pos, Hit.GetActor()->GetActorLocation());
 					float MaxDistance = Radius;
 					float StrengthMultiplier = FMath::Clamp(1.0f - (Distance / MaxDistance), 0.7f, 1.0f);
-					float FinalStrength = ExplosionStrength;
+					float FinalStrength = ExplosionStrength * StrengthMultiplier;
 
 					// Hit Effect
 					UNiagaraFunctionLibrary::SpawnSystemAtLocation(Golem->GetWorld(), mHitEffect, player->GetActorLocation(), FRotator::ZeroRotator, FVector(2.f, 2.f, 2.f));

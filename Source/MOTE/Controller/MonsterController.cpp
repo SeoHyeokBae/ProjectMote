@@ -16,7 +16,6 @@ AMonsterController::AMonsterController()
 
 	// 시야를 만들어준다
 	mSightConfing = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-
 	// backoffset
 	mSightConfing->SetMaxAge(3.f);
 	mSightConfing->SightRadius = 1500.f;
@@ -25,11 +24,11 @@ AMonsterController::AMonsterController()
 	mSightConfing->DetectionByAffiliation.bDetectEnemies = true;
 	mSightConfing->DetectionByAffiliation.bDetectNeutrals = false;
 	mSightConfing->DetectionByAffiliation.bDetectFriendlies = false;
-
+	
 	// 배열에 추가한다, 특정감각의 소스로 등록
 	mAIPerception->ConfigureSense(*mSightConfing);
 	mDamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("DamageConfig"));
-	mDamageConfig->SetMaxAge(5.0f);
+	mDamageConfig->SetMaxAge(3.0f);
 	mAIPerception->ConfigureSense(*mDamageConfig);
 
 	// 대표감각기관
@@ -143,4 +142,15 @@ void AMonsterController::OnTargetDetect(AActor* Target, FAIStimulus Stimulus)
 
 void AMonsterController::OnTargetForget(AActor* Target)
 {
+	/*
+	DefaultEngine.ini
+	[/Script/AIModule.AISystem]
+	bForgetStaleActors=True
+	*/
+
+	AActor* CurrentTarget = Cast<AActor>(Blackboard->GetValueAsObject(TEXT("Target")));
+	if (CurrentTarget == Target)
+	{
+		Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
+	}
 }

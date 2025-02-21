@@ -147,7 +147,6 @@ void APlayerCharacter::BeginPlay()
 #if WITH_EDITOR
 		else if (MapName == "UEDPIE_0_BossPlanet")
 #else
-		FString MapName = GetWorld()->GetMapName();  // 패키징된 게임에서 실행 중일 때
 		else if (MapName == "BossPlanet")
 #endif
 		{
@@ -895,9 +894,7 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damag
 	if (mIsDead)
 		return 0.f;
 
-	mState->SetHP(DamageAmount);
-
-	if (mState->mHP <= 0.f)
+	if (mState->SetHP(DamageAmount))
 	{
 		// 죽을 경우 처리
 		mIsDead = true;

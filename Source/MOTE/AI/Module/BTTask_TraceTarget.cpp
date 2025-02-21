@@ -10,7 +10,7 @@ UBTTask_TraceTarget::UBTTask_TraceTarget()
 	NodeName = TEXT("TraceTarget");
 	AcceptableRadius = 300.f;
 
-	//bNotifyTick = true;
+	bNotifyTick = true;
 	bNotifyTaskFinished = true;
 }
 
@@ -52,7 +52,7 @@ void UBTTask_TraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 
-		AIPawn->SetAIType(EAIType::Idle);
+		//AIPawn->SetAIType(EAIType::Idle);
 
 		return;
 	}
@@ -67,14 +67,14 @@ void UBTTask_TraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		return;
 	}
 
-	float Dist = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsFloat(TEXT("Distance"));
-	if (Dist > 280.f)
-	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+	//float Dist = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsFloat(TEXT("Distance"));
+	//if (Dist > 280.f)
+	//{
+	//	FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 
-		AIPawn->SetAIType(EAIType::Idle);
-		return;
-	}
+	//	AIPawn->SetAIType(EAIType::Idle);
+	//	return;
+	//}
 
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 }

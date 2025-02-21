@@ -15,7 +15,8 @@ void UCustomGravityComponent::BeginPlay()
 	for (TActorIterator<AStaticMeshActor> it(GetWorld()); it; ++it)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Cyan, FString::Printf(TEXT("%s"),*it->GetActorLabel()));
-		if (it->GetActorLabel().Contains(TEXT("Planet"), ESearchCase::IgnoreCase))
+		AActor* Actor = Cast<AActor>(*it);
+		if (Actor->GetActorNameOrLabel().Contains(TEXT("Planet"), ESearchCase::IgnoreCase))
 		{
 			mPlanet = *it; 
 			break;

@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "DmgTextActor.generated.h"
 
-#define PI 3.141592
 #define FREQUENCY 1.5f // ºóµµ
 #define AMPLITUDE 90   // ÁøÆø
 

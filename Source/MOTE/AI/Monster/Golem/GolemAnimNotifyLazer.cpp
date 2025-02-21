@@ -99,6 +99,8 @@ void UGolemAnimNotifyLazer::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 							bool bHit = MeshComp->GetWorld()->SweepMultiByChannel(ExplosionHitResults, Hit.ImpactPoint, Hit.ImpactPoint, FQuat::Identity
 								, ECC_GameTraceChannel8, FCollisionShape::MakeSphere(Radius), CollisionParams);
 
+
+
 							if (bHit)
 							{
 								for (const FHitResult& ExPlosionHit : ExplosionHitResults)

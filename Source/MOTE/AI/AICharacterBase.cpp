@@ -91,12 +91,12 @@ void AAICharacterBase::RandomPatrolPoint()
 
 	if (NavSystem)
 	{
-		FVector BaseLocation = GetActorLocation(); // 또는 플레이어 위치, 특정 포인트 등
+		FVector BaseLocation = GetActorLocation();
 
 		// 랜덤 위치를 찾기 위한 반경
 		float Radius = 2000.0f;
 
-		// 기존 랜던 포인트가 있으면 변경
+		// 기존 랜덤 포인트가 있으면 변경
 		if (mPatrolPoints.Num() > 4)
 		{
 			for (int i = 1; i < 4; ++i)
@@ -105,7 +105,7 @@ void AAICharacterBase::RandomPatrolPoint()
 				// FNavLocation.Location 
 				FNavLocation RandomLocation;
 
-				// 네비게이션 데이터가 있는지 확인합니다.
+				// 네비게이션 데이터가 있는지 확인
 				if (NavSystem->GetRandomReachablePointInRadius(BaseLocation, Radius, RandomLocation))
 				{
 					mPatrolPoints[i] = RandomLocation.Location;
@@ -117,10 +117,9 @@ void AAICharacterBase::RandomPatrolPoint()
 			for (int i = 0; i < 3; ++i)
 			{
 				// 함수가 반환하는 랜덤 위치값
-				// FNavLocation.Location 
 				FNavLocation RandomLocation;
 
-				// 네비게이션 데이터가 있는지 확인합니다.
+				// 네비게이션 데이터가 있는지 확인
 				if (NavSystem->GetRandomReachablePointInRadius(BaseLocation, Radius, RandomLocation))
 				{
 					mPatrolPoints.Add(RandomLocation.Location);

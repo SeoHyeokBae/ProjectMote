@@ -32,10 +32,17 @@ protected:
 	class AAICharacterBase* mSpawnActor = nullptr;
 
 	int32 mCount = 0;
+
+	float mTimeAcc = 0.f;
+	
+	UPROPERTY(EditAnywhere, Category = InitSetting)
 	float mInterval = 2.5f;
 
-	UPROPERTY(EditAnywhere)
-	float mTimeAcc = 0.f;
+	UPROPERTY(EditAnywhere, Category = InitSetting)
+	float mSpawnRadius = 5000.f;
+
+	UPROPERTY(EditAnywhere, Category = InitSetting)
+	int32 mMaxSpawn = 4;
 
 	FTimerHandle StartTimerHandle;
 	FTimerHandle SpawnTimerHandle;

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "LockOnLaser.generated.h"
 
+#define CylinerSize 200.f
+
 UCLASS()
 class MOTE_API ALockOnLaser : public AActor
 {
@@ -31,13 +33,14 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UMaterialInstanceDynamic* mMtrlInstDynamic;
 
-	float mLockOnTime		= 2.5f; // 0.5
+	float mLockOnTime		= 1.5f; // 0.5
 	float mLockOnAcc		= 0.f;
 	float mMissTargetTime	= 3.f; // 0.3
-	float mMissTargetAcc	= 0.f;
 	float mTotalAcc			= 0.f;
-
+	float mMissTargetAcc = 0.f;
 	float DefaultColorParam	= 10.f;
+
+	float mStartTime = 0.f;
 
 	bool mIsLockOn = false;
 	bool mIsFinish = false;
@@ -47,14 +50,10 @@ public:
 	bool IsFinish() const { return mIsFinish; }
 
 protected:
-	FTimerHandle DelayTimerHandle;
-	FTimerHandle FireTimerHandle;
-
-protected:
 	virtual void BeginPlay() override;
-	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void Tick(float Deltatime) override;
 
 protected:
-	void UpdateLength();
+	void UpdateLength(float Deltatime);
 
 };

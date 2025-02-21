@@ -6,9 +6,8 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_SkillLazer.generated.h"
 
-/**
- * 
- */
+#define MAXT
+
 UCLASS()
 class MOTE_API UBTTask_SkillLazer : public UBTTaskNode
 {
@@ -28,6 +27,7 @@ protected:
 	float mFireTime = 1.5f;
 	float mTimeOver = 3.f;
 	float mTimeAcc = 0.f;
+	float mRotAcc = 0.f;
 
 public:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory);

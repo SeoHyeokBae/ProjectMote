@@ -159,6 +159,7 @@ void USoundSubsystem::SetMasterVolume(float Value)
 {
     if (MasterVolume == Value) return;
     MasterVolume = Value;
+
     UGameplayStatics::SetSoundMixClassOverride(GetWorld(), mSoundMix, MasterSoundClass, MasterVolume, 1.f, 0.f);
 }
 
@@ -174,5 +175,6 @@ void USoundSubsystem::SetVFXVolume(float Value)
 {
     if (VFXVolume == Value) return;
     VFXVolume = Value;
+
     UGameplayStatics::SetSoundMixClassOverride(GetWorld(), mSoundMix, VFXSoundClass, VFXVolume,1.f, 0.f);
 }

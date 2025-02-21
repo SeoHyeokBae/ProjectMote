@@ -35,7 +35,7 @@ void UBTService_RandNumber::OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, 
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsInt(CMonsterDefaultKey::mAttackNumber, 4);
 	}
-	else if (Num <= 15)		// 15%
+	else if (Num <= 85)		// 15%
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsInt(CMonsterDefaultKey::mAttackNumber, 5);
 	}

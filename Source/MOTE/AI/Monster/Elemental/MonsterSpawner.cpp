@@ -44,7 +44,7 @@ void AMonsterSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (mCount > 4)
+	if (mCount > mMaxSpawn)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(StartTimerHandle);
 		GetWorld()->GetTimerManager().ClearTimer(SpawnTimerHandle);	
@@ -64,14 +64,14 @@ void AMonsterSpawner::SpawnRandomLocation()
 		FVector BaseLocation = GetActorLocation(); // 또는 플레이어 위치, 특정 포인트 등
 
 		// 랜덤 위치를 찾기 위한 반경
-		float Radius = 5000.0f;
+		mSpawnRadius = 5000.0f;
 
 		// 함수가 반환하는 랜덤 위치값
 		// FNavLocation.Location 
 		FNavLocation RandomLocation;
 		
 		// 네비게이션 데이터가 있는지 확인합니다.
-		if (NavSystem->GetRandomReachablePointInRadius(BaseLocation, Radius, RandomLocation))
+		if (NavSystem->GetRandomReachablePointInRadius(BaseLocation, mSpawnRadius, RandomLocation))
 		{
 			// 스폰 파라미터 설정
 			FActorSpawnParameters SpawnParams;

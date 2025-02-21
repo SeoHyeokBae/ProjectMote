@@ -31,10 +31,17 @@ void UAnimNotifySkillCrash::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 	if (Golem)
 	{
 		FVector CrashPos = MeshComp->GetSocketLocation("SkillCrash");
-		FRotator ActorRot = Golem->GetActorRightVector().Rotation();
+		// 텔레그레프가 찍힌 지점
+		if (Golem->GetCrashHitPos() != FVector::Zero())
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("INTELE"));
+			CrashPos = Golem->GetCrashHitPos() + FVector(0.f,0.f,1.f);
+		}
+
+		FRotator ActorRot = Golem->GetActorRightVector().Rotation() + FRotator(0, 45, 0);
 
 		// Fist collision
-		UGameplayStatics::SpawnEmitterAtLocation(Golem->GetWorld(), mFistEffect, CrashPos, ActorRot + FRotator(0,45,0), FVector(5, 5, 5));
+		UGameplayStatics::SpawnEmitterAtLocation(Golem->GetWorld(), mFistEffect, CrashPos, ActorRot , FVector(5, 5, 5));
 
 		TArray<FHitResult> HitResults;
 		TSet<APlayerCharacter*> DamagedActors;
@@ -111,6 +118,7 @@ void UAnimNotifySkillCrash::DrawTelegraph(USkeletalMeshComponent* MeshComp, clas
 	FRotator AttackRot;
 	FTransform transform;
 	
+	// telegraph 데칼 그릴 위치 선점
 	FVector Start = Player->GetActorLocation();
 	FVector End = Start + (Player->GetActorUpVector() * -30000.0f);
 
@@ -158,16 +166,19 @@ void UAnimNotifySkillCrash::DrawTelegraph(USkeletalMeshComponent* MeshComp, clas
 			FVector End = Start + Telegraph->GetActorUpVector() * 1000.f;
 			FVector BoxExtent(500.f, 200.0f, 1400.0f);
 			// 충돌체 기울이기
-			FQuat TiltRotation = FQuat(AttackDir.YAxisVector, FMath::DegreesToRadians(25.0f));
-			FQuat SweepRotation = AttackRot.Quaternion();
-			FQuat FinalRotation = SweepRotation * TiltRotation;
+			//FQuat TiltRotation = FQuat(AttackDir.YAxisVector, FMath::DegreesToRadians(25.0f));
+			//FQuat SweepRotation = AttackRot.Quaternion();
+			//FQuat FinalRotation = SweepRotation * TiltRotation;
+
+			FRotator FinalRotation = AttackDir.Rotation() + FRotator(25.f, 0.f, 0.f);
+
 
 			TArray<FHitResult> HitResults;
 			TSet<APlayerCharacter*> DamagedActors;
 			FCollisionQueryParams CollisionParams;
 			CollisionParams.AddIgnoredActor(MeshComp->GetOwner());
 
-			bool bHit = MeshComp->GetWorld()->SweepMultiByChannel(HitResults, Start, End, FinalRotation
+			bool bHit = MeshComp->GetWorld()->SweepMultiByChannel(HitResults, Start, End, FinalRotation.Quaternion()
 				, ECC_GameTraceChannel8, FCollisionShape::MakeBox(BoxExtent),CollisionParams);
 			
 			if (bHit)
@@ -202,7 +213,7 @@ void UAnimNotifySkillCrash::DrawTelegraph(USkeletalMeshComponent* MeshComp, clas
 
 //#if ENABLE_DRAW_DEBUG
 //					FColor DrawColor = player ? FColor::Red : FColor::Green;
-//					DrawDebugBox(MeshComp->GetWorld(), (Start + End) / 2, BoxExtent, FinalRotation, DrawColor, false, 1.f);
+//					DrawDebugBox(MeshComp->GetWorld(), (Start + End) / 2, BoxExtent, (FinalRotation - FRotator(50.f, 0.f, 0.f)).Quaternion(), DrawColor, false, 1.f);
 //#endif
 				}
 			}

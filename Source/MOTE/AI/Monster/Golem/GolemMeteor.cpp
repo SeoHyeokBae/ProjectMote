@@ -230,5 +230,4 @@ void AGolemMeteor::UpdateDecalSize()
 	float NewScale = (mDeltaLength / mMaxLength) * 1.2;
 
 	mAimDecalComponent->SetWorldScale3D(FVector(NewScale, NewScale, NewScale));
-	
 }

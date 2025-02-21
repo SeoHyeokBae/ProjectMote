@@ -35,6 +35,7 @@ void UMonsterHPBar::SetMonsterHP(float Percent)
 		// 0.3s 뒤 매프레임 서서히 감소
 		GetWorld()->GetTimerManager().SetTimer(TimerHandleHP, [this, Percent]()
 			{
+				if (!mDelayHP) return;
 				// 최종 Percent 지점
 				float DestAmount = Percent;
 				// 현재(Start) Percent

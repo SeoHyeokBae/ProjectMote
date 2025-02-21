@@ -28,9 +28,23 @@ void UGolemAnimNotifyCrashTelegraph::Notify(USkeletalMeshComponent* MeshComp, UA
 
 		bool bHit = MeshComp->GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel10, QueryParams);
 
+//#if ENABLE_DRAW_DEBUG
+//		if (bHit)
+//		{
+//			// 히트한 지점과 시작 지점을 연결하는 디버그 선 그리기
+//			DrawDebugLine(MeshComp->GetWorld(), Start, HitResult.Location, FColor::Red, false, 2.0f, 0, 2.0f);
+//		}
+//		else
+//		{
+//			// 히트하지 않으면 끝 지점까지의 디버그 선 그리기
+//			DrawDebugLine(MeshComp->GetWorld(), Start, End, FColor::Green, false, 2.0f, 0, 2.0f);
+//		}
+//#endif
+
 		if (bHit)
 		{
 			CrashPos = HitResult.Location;
+			Golem->SetCrashHitPos(CrashPos);
 			
 			transform.SetLocation(CrashPos);
 			transform.SetRotation(FRotator::ZeroRotator.Quaternion());

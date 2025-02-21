@@ -516,10 +516,10 @@ ETargetDirection UTargetSystemComponent::WhichSideOfTarget(AActor* NewTargetable
 
 	// LockOn일 경우
 	// Target과 플레이어의 내적을 기준으로 구분합니다.
-	const FVector TargetActorDirection = UKismetMathLibrary::GetDirectionUnitVector(mPlayerCameraManager->GetCameraLocation(),
-		Target->GetActorLocation());
-	const FVector NewTargetableActorDirection = UKismetMathLibrary::GetDirectionUnitVector(mPlayerCameraManager->GetCameraLocation(),
-		NewTargetableActor->GetActorLocation());
+	const FVector TargetActorDirection = 
+		UKismetMathLibrary::GetDirectionUnitVector(mPlayerCameraManager->GetCameraLocation(), Target->GetActorLocation());
+	const FVector NewTargetableActorDirection = 
+		UKismetMathLibrary::GetDirectionUnitVector(mPlayerCameraManager->GetCameraLocation(),NewTargetableActor->GetActorLocation());
 	const FVector NewDirection = UKismetMathLibrary::Cross_VectorVector(TargetActorDirection, NewTargetableActorDirection);
 	const float NewDot = UKismetMathLibrary::Dot_VectorVector(NewDirection, GetOwner()->GetActorUpVector());
 
