@@ -27,6 +27,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UDmageAmountWidget* mWidget;
 
+	// °¨¼Ò
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<class UTimelineComponent>	mTimelineComp;
 
@@ -38,6 +39,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	FVector EndLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	FVector IncreaseEndLocation;
+
+	bool IsIncrease = false;
+	float TimeAcc = 0.f;
 
 public:
 	float mDamageAmount;
@@ -51,6 +58,8 @@ public:
 public:
 	void InputDamage(float Damage, bool IsHeadShot = false);
 	void ChangeColor(FLinearColor NewColor);
+
+	void SetIsIncrease() { IsIncrease = true; }
 
 protected:
 	UFUNCTION()

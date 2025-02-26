@@ -39,8 +39,8 @@ void UNotifyStateAttackCollision::NotifyTick(USkeletalMeshComponent* MeshComp, U
 			bool Collision = mPlayer->GetWorld()->SweepMultiByChannel(HitResults, Start, End, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel6, FCollisionShape::MakeSphere(30.f), param);
 
 #if ENABLE_DRAW_DEBUG
-			//FColor DrawColor = Collision ? FColor::Red : FColor::Green;
-			//DrawDebugCapsule(mPlayer->GetWorld(), (Start + End) / 2.f, 125.f, 30.f, FRotationMatrix::MakeFromZ(End - Start).ToQuat(), DrawColor, false, 0.2f);
+			FColor DrawColor = Collision ? FColor::Red : FColor::Green;
+			DrawDebugCapsule(mPlayer->GetWorld(), (Start + End) / 2.f, 125.f, 30.f, FRotationMatrix::MakeFromZ(End - Start).ToQuat(), DrawColor, false, 0.2f);
 #endif
 			// 충돌처리 결과
 			for (const FHitResult& Hit : HitResults)

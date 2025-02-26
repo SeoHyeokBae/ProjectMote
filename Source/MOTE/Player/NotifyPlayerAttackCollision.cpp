@@ -211,7 +211,7 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 						RotOffset = FRotator(0.0, 10.0 + RandAgle, 0.0);
 
 						if (SoundSubsystem)
-							SoundSubsystem->PlayVFXSound(TEXT("Hit0"),3.f);
+							SoundSubsystem->PlayVFXSound(TEXT("Hit0"), 3.f);
 						break;
 					}
 					case 1:
@@ -263,16 +263,29 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 						break;
 					}
 					}
+					//if (SoundSubsystem)
+					//	SoundSubsystem->PlayVFXSound(TEXT("RandomHit"), 3.f);
 
 					FActorSpawnParameters SpawnParams;
 					ADmgTextActor* DmgText = Player->GetWorld()->SpawnActor<ADmgTextActor>(ADmgTextActor::StaticClass(), 
 						Hit.ImpactPoint + HitActor->GetActorUpVector() * 300.f + HitActor->GetActorRightVector() * - 50.f, FRotator::ZeroRotator, SpawnParams);
 					IsHeadShot ? DmgText->InputDamage(Damage + AddDmg, true) : DmgText->InputDamage(Damage + AddDmg);
 
-
 					FRotator Rot = Player->GetCameraRotator() + FRotator(0.0,-90.0,0.0);
+					// 카메라 플레이어 앞뒤 판단
+					APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(Player->GetWorld(), 0);
+					if (CameraManager)
+					{
+						FVector PlayerToCamera = UKismetMathLibrary::GetDirectionUnitVector(Player->GetActorLocation(), CameraManager->GetCameraLocation());
+						float vDot = UKismetMathLibrary::Dot_VectorVector(Player->GetActorForwardVector(), PlayerToCamera);
+						
+						if (vDot >= 0)
+						{
+							Rot = Player->GetCameraRotator() + FRotator(0.0, 90.0, 0.0);
+						}
+					}
+
 					UNiagaraFunctionLibrary::SpawnSystemAtLocation(Player->GetWorld(), mSlashHitEffect, Hit.ImpactPoint, Rot + RotOffset, FVector(2.0,2.0,2.0));
-					UNiagaraFunctionLibrary::SpawnSystemAtLocation(Player->GetWorld(), mHitEffect, Hit.ImpactPoint);
 					Player->OffCameraShake();
 				}
 			}
@@ -313,6 +326,8 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 							RotOffset = FRotator(-180.0, -15.0, 0.0);
 							break;
 						}
+
+						//SoundSubsystem->PlayVFXSound(TEXT("RandomHit"), 3.f);
 
 						FRotator Rot = Player->GetCameraRotator() + FRotator(0.0, -90.0, 0.0);
 						UNiagaraFunctionLibrary::SpawnSystemAtLocation(Player->GetWorld(), mHitEffect, Hit.ImpactPoint, Rot + RotOffset);

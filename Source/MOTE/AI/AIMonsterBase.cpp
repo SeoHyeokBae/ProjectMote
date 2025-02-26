@@ -145,6 +145,7 @@ float AAIMonsterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 			ADmgTextActor* DmgText = GetWorld()->SpawnActor<ADmgTextActor>(ADmgTextActor::StaticClass(), GetActorTransform(), SpawnParams);
 			DmgText->InputDamage(-DamageAmount);
 			DmgText->ChangeColor(FLinearColor::Green);
+			DmgText->SetIsIncrease();
 		}
 
 	}

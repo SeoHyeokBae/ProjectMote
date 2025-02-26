@@ -72,7 +72,10 @@ bool AMotePlayerState::SetHP(float Amount, bool IsIncrease, bool IsVisible)
 		ADmgTextActor* DmgText = GetWorld()->SpawnActor<ADmgTextActor>(ADmgTextActor::StaticClass(), Cast<APlayerController>(Owner)->GetCharacter()->GetActorTransform(), SpawnParams);
 		DmgText->InputDamage(Amount);
 		if (IsIncrease)
+		{
 			DmgText->ChangeColor(FLinearColor::Green);
+			DmgText->SetIsIncrease();
+		}
 	}
 
 	if (IsIncrease)

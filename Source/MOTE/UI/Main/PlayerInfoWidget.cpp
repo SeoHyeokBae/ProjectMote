@@ -34,51 +34,35 @@ void UPlayerInfoWidget::SetHPPercent(float Percent)
 
 	if (GetWorld()->GetTimerManager().IsTimerActive(TimerHandleHP))
 	{
-		if (!mDelayHP) return;
 		// 0.3s 뒤 매프레임 서서히 감소
-		GetWorld()->GetTimerManager().SetTimer(TimerHandleHP, [this, Percent]()
-			{
-				// 최종 Percent 지점
-				float DestAmount = Percent;
-				// 현재(Start) Percent
-				float CurrentAmount = mDelayHP->GetPercent();
-				// 매틱 감소시키는 양 (Duration 0.5s)
-				float DecreaseAmount = (CurrentAmount - DestAmount) / 0.5 * GetWorld()->GetDeltaSeconds();
-				CurrentAmount -= DecreaseAmount;
-				if (CurrentAmount <= DestAmount)
-				{
-					CurrentAmount = DestAmount;
-					GetWorld()->GetTimerManager().ClearTimer(TimerHandleHP);
-				}
-				mDelayHP->SetPercent(CurrentAmount);
-
-			}, GetWorld()->GetDeltaSeconds(), true);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandleHP, this, &UPlayerInfoWidget::DelayReductionEffect, GetWorld()->GetDeltaSeconds(), true);
 	}
 	else
 	{
-		if (!mDelayHP) return;
 		// 0.3s 뒤 매프레임 서서히 감소
-		GetWorld()->GetTimerManager().SetTimer(TimerHandleHP, [this, Percent]()
-			{
-				// 최종 Percent 지점
-				float DestAmount = Percent;
-				// 현재(Start) Percent
-				float CurrentAmount = mDelayHP->GetPercent();
-				// 매틱 감소시키는 양 (Duration 0.5s)
-				float DecreaseAmount = (CurrentAmount - DestAmount) / 0.5 * GetWorld()->GetDeltaSeconds();
-				CurrentAmount -= DecreaseAmount;
-				if (CurrentAmount <= DestAmount)
-				{
-					CurrentAmount = DestAmount;
-					GetWorld()->GetTimerManager().ClearTimer(TimerHandleHP);
-				}
-				mDelayHP->SetPercent(CurrentAmount);
-
-			}, GetWorld()->GetDeltaSeconds(), true, 0.3f);
+		GetWorld()->GetTimerManager().SetTimer(TimerHandleHP, this, &UPlayerInfoWidget::DelayReductionEffect, GetWorld()->GetDeltaSeconds(), true, 0.3f);
 	}
 }
 
 void UPlayerInfoWidget::ClearHandle()
 {
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandleHP);
+}
+
+void UPlayerInfoWidget::DelayReductionEffect()
+{
+	if (!mDelayHP) return;
+	// 최종 Percent 지점
+	float DestAmount = mPlayerHP->GetPercent();
+	// 현재(Start) Percent
+	float CurrentAmount = mDelayHP->GetPercent();
+	// 매틱 감소시키는 양 (Duration 0.5s)
+	float DecreaseAmount = (CurrentAmount - DestAmount) / 0.5 * GetWorld()->GetDeltaSeconds();
+	CurrentAmount -= DecreaseAmount;
+	if (CurrentAmount <= DestAmount)
+	{
+		CurrentAmount = DestAmount;
+		GetWorld()->GetTimerManager().ClearTimer(TimerHandleHP);
+	}
+	mDelayHP->SetPercent(CurrentAmount);
 }

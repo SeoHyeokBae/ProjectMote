@@ -29,4 +29,7 @@ private:
 public:
 	void SetHPPercent(float Percent);
 	void ClearHandle();
+
+protected:
+	void DelayReductionEffect();
 };

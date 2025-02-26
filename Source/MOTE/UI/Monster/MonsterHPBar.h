@@ -36,4 +36,7 @@ public:
 	void SetMonsterHP(float Percent);
 	void SetOwner(class AAIMonsterBase* Owner);
 	void ClearHandle();
+
+protected:
+	void DelayReductionEffect();
 };

@@ -19,10 +19,10 @@ ABaseWeapon::ABaseWeapon()
 	mBasePoint->SetupAttachment(RootComponent);
 	mTipPoint->SetupAttachment(RootComponent);
 
-	mBasePoint->SetRelativeLocation(FVector(0.0, 0.0, 50.0));
-	mBasePoint->SetRelativeRotation(FRotator(0.0, 90.0, 0.0));
-	mTipPoint->SetRelativeLocation(FVector(0.0, 0.0, 300.0));
-	mTipPoint->SetRelativeRotation(FRotator(0.0, 90.0, 0.0));
+	mBasePoint->SetRelativeLocation(FVector(75.0, 0.0, 0.0));
+	mBasePoint->SetRelativeRotation(FRotator(90.0, 90.0, 0.0));
+	mTipPoint->SetRelativeLocation(FVector(-225.0, 0.0, 25.0));
+	mTipPoint->SetRelativeRotation(FRotator(90.0, 90.0, 0.0));
 
 	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
 	//	MeshAsset(TEXT("/Script/Engine.SkeletalMesh'/Game/KoreanTraditionalMartialArts/Meshs/Weapons/Meshs/SKM_Hwando.SKM_Hwando'"));
