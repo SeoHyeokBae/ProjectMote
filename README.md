@@ -1,6 +1,6 @@
 # 👽 Mote
 
-$\bf{\small{\color{#808080}컨텐츠\ 폴더를\ 제외한\ 프로젝트\ 파일}}$
+$\bf{\small{\color{#808080}컨텐츠\ 폴더를\ 제외한\ 프로젝트\ 파일\ 및\ 소스\ 코드}}$
 
 ### 구현 과정: 📄[Project Details](https://www.notion.so/Project-Mote-1240c0421f3b81dbbce1eb1e0baae067?pvs=4 "Go to Notion")
 ### 영상: 🎬[Video](https://www.youtube.com/watch?v=q9L0JoAHNII "Project Mote Play Video")
