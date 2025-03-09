@@ -28,9 +28,9 @@ public:
 	UImage* mSkillStoneFrame;
 	UPROPERTY()
 	UUserWidget* mPlayerHP;
+
 	UPROPERTY()
 	class UNiagaraSystemWidget* mNiagaraWidget;
-
 	UPROPERTY()
 	class UNiagaraSystemWidget* mNiagaraStoneLight;
 

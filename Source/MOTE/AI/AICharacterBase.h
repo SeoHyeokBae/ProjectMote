@@ -60,11 +60,6 @@ public:
 
 	virtual FGenericTeamId GetGenericTeamId() const;
 
-	void AddPatrolStart(AActor* Actor);
-	void AddPatrolPoint(const TArray<class AAIPatrolPoint*>& Array);
-	void RegisterPatrolPoint();
-	void NextPatrolPoint();
-
 	void AddPatrolStart(FVector Point);
 	void RegisterPatrolVectorPoint();
 	void NextPatrolVectorPoint();

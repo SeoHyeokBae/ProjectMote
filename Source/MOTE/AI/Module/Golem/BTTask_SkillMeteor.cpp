@@ -55,15 +55,6 @@ void UBTTask_SkillMeteor::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 	// Target을 얻어온다.
 	AActor* Target = Cast<AActor>(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
-	//if (!Target)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-
-	//	Golem->SetGolemAnim(EGolemState::Idle);
-
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("NoTarget"));
-	//	return;
-	//}
 
 	bool IsStagger = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsBool(TEXT("Stagger"));
 	if (IsStagger)
@@ -86,19 +77,19 @@ void UBTTask_SkillMeteor::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-			// 위치와 회전 값 설정
 			FRotator Rotation = FRotator::ZeroRotator;
 			FVector TargetLocation = Player->GetActorLocation();
 			if (Player->GetGravityDirection() != FVector(0.f, 0.f, -1.0f))
 			{
-				TargetLocation += Player->GetActorUpVector() * 10000.0f;
+				TargetLocation += Player->GetActorUpVector() * METEOR_SPAWN_HEIGHT;
 			}
 			else
 			{
-				TargetLocation += FVector(0, 0, 10000.0f);
+				TargetLocation += FVector(0, 0, METEOR_SPAWN_HEIGHT);
 			}
-			// 액터 스폰
-			AMeteorSpawnActor* SpawnedActor = GetWorld()->SpawnActor<AMeteorSpawnActor>(AMeteorSpawnActor::StaticClass(), TargetLocation, Rotation, SpawnParams);
+
+			AMeteorSpawnActor* SpawnedActor = GetWorld()->SpawnActor<AMeteorSpawnActor>(AMeteorSpawnActor::StaticClass(), 
+																					TargetLocation, Rotation, SpawnParams);
 			if (Golem->IsRage)
 				SpawnedActor->RageMode();
 		}
@@ -111,7 +102,6 @@ void UBTTask_SkillMeteor::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 		Golem->SetGolemAnim(EGolemState::Idle);
 
-		//OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
 		return;
 	}
 

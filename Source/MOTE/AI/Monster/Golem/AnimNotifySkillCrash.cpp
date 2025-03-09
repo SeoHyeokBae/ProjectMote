@@ -34,7 +34,6 @@ void UAnimNotifySkillCrash::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 		// ÅÚ·¹±×·¹ÇÁ°¡ ÂïÈù ÁöÁ¡
 		if (Golem->GetCrashHitPos() != FVector::Zero())
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("INTELE"));
 			CrashPos = Golem->GetCrashHitPos() + FVector(0.f,0.f,1.f);
 		}
 
@@ -66,7 +65,6 @@ void UAnimNotifySkillCrash::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 					// interaction 
 					FVector Direction = (Hit.GetActor()->GetActorLocation() - CrashPos).GetSafeNormal();
-					//Direction.Normalize();
 					float Distance = FVector::Dist(CrashPos, Hit.GetActor()->GetActorLocation());
 					float MaxDistance = Radius;
 					float ExplosionStrength = 5000.0f;
@@ -171,7 +169,6 @@ void UAnimNotifySkillCrash::DrawTelegraph(USkeletalMeshComponent* MeshComp, clas
 			//FQuat FinalRotation = SweepRotation * TiltRotation;
 
 			FRotator FinalRotation = AttackDir.Rotation() + FRotator(25.f, 0.f, 0.f);
-
 
 			TArray<FHitResult> HitResults;
 			TSet<APlayerCharacter*> DamagedActors;

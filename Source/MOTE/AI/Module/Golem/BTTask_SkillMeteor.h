@@ -7,9 +7,8 @@
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_SkillMeteor.generated.h"
 
-/**
- * 
- */
+#define  METEOR_SPAWN_HEIGHT 10000.0f
+
 UCLASS()
 class MOTE_API UBTTask_SkillMeteor : public UBTTaskNode
 {

@@ -24,8 +24,6 @@ EBTNodeResult::Type UBTTask_SkillLazerCharge::ExecuteTask(UBehaviorTreeComponent
 		AAIController* Control = Golem->GetController<AAIController>();
 		if (IsValid(Control))
 		{
-			//Control->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
-
 			bool IsStagger = Control->GetBlackboardComponent()->GetValueAsBool(TEXT("Stagger"));
 			if (IsStagger)
 			{
@@ -45,7 +43,6 @@ void UBTTask_SkillLazerCharge::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	// AIPawn을 얻어온다.
 	AGolem* Golem = OwnerComp.GetAIOwner()->GetPawn<AGolem>();
 
 	if (!IsValid(Golem))
@@ -56,19 +53,6 @@ void UBTTask_SkillLazerCharge::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 
 		return;
 	}
-
-
-	//// Target을 얻어온다.
-	//AActor* Target = Cast<AActor>(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
-
-	//if (!Target)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-
-	//	Golem->SetGolemAnim(EGolemState::Idle);
-
-	//	return;
-	//}
 
 	AAIController* Control = Golem->GetController<AAIController>();
 	if (IsValid(Control))
@@ -83,6 +67,7 @@ void UBTTask_SkillLazerCharge::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 			return;
 		}
 	}
+
 	// 공격끝났는지 판단
 	bool CanAttack = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsBool(TEXT("CanAttack"));
 	if (!CanAttack)
@@ -93,8 +78,6 @@ void UBTTask_SkillLazerCharge::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 
 		return;
 	}
-
-
 }
 
 void UBTTask_SkillLazerCharge::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)

@@ -26,7 +26,6 @@ protected:
 	float mFireAcc = 0.f;
 	float mFireTime = 1.5f;
 	float mTimeOver = 3.f;
-	float mTimeAcc = 0.f;
 	float mRotAcc = 0.f;
 
 public:

@@ -272,7 +272,7 @@ void UNotifyPlayerAttackCollision::CreateCollision(class APlayerCharacter* Playe
 					IsHeadShot ? DmgText->InputDamage(Damage + AddDmg, true) : DmgText->InputDamage(Damage + AddDmg);
 
 					FRotator Rot = Player->GetCameraRotator() + FRotator(0.0,-90.0,0.0);
-					// 카메라 플레이어 앞뒤 판단
+					// 카메라 플레이어 앞뒤 판별
 					APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(Player->GetWorld(), 0);
 					if (CameraManager)
 					{

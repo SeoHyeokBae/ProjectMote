@@ -102,7 +102,6 @@ void AAICharacterBase::RandomPatrolPoint()
 			for (int i = 1; i < 4; ++i)
 			{
 				// 함수가 반환하는 랜덤 위치값
-				// FNavLocation.Location 
 				FNavLocation RandomLocation;
 
 				// 네비게이션 데이터가 있는지 확인
@@ -129,30 +128,6 @@ void AAICharacterBase::RandomPatrolPoint()
 	}
 }
 
-void AAICharacterBase::RegisterPatrolPoint()
-{
-	AAIController* Control = GetController<AAIController>();
-
-	if (IsValid(Control))
-	{
-		bool	PatrolEnable = false;
-
-		if (mPatrolArray.Num() > 1)
-		{
-			PatrolEnable = true;
-			Control->GetBlackboardComponent()->SetValueAsObject(
-				CMonsterDefaultKey::mPatrolPoint, mPatrolArray[mPatrolIndex]);
-		}
-
-		Control->GetBlackboardComponent()->SetValueAsBool(
-			CMonsterDefaultKey::mPatrolEnable, PatrolEnable);
-	}
-}
-
-void AAICharacterBase::NextPatrolPoint()
-{
-	mPatrolIndex = (mPatrolIndex + 1) % mPatrolArray.Num();
-}
 
 void AAICharacterBase::PossessedBy(AController* NewController)
 {

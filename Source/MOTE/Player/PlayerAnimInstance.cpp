@@ -99,12 +99,12 @@ void UPlayerAnimInstance::AnimNotify_DashStart()
 	{
 		FVector Dir = mTargetDir;
 
-		if (mIsAim && mTargetDir != FVector::Zero()) // 조준상태이고 에임가능상태
+		if (mIsAim && mTargetDir != FVector::Zero()) 
 		{
 			mPlayer->LaunchCharacter(Dir * 50000.f, true, true);
 			mMovement->GravityScale = 0.f;
 		}
-		else // 에임상태가 아니거나 에임불가일때 캐릭터 방향으로 일반 대쉬
+		else 
 		{
 			if(mIsAim)
 				mPlayer->ZoomOut();
@@ -122,7 +122,6 @@ void UPlayerAnimInstance::AnimNotify_DashStart()
 		if (mIsJump)
 		{
 			mDashEnable = false;
-			//mMovement->GravityScale = 0.f;
 		}
 	}
 }

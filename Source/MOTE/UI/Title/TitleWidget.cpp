@@ -78,8 +78,9 @@ void UTitleWidget::StartButtonClick()
 			OptionButton->SetVisibility(ESlateVisibility::Collapsed);
 			ExitButton->SetVisibility(ESlateVisibility::Collapsed);
 			TitleName->SetVisibility(ESlateVisibility::Collapsed);
-			
+
 			PlayerController->SetViewTargetWithBlend(Pawn->GetCamera(),2.f ,EViewTargetBlendFunction::VTBlend_Cubic);
+			TRACE_BOOKMARK(TEXT("Switch Camera"));
 
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UTitleWidget::LaunchPawn, 2.5f, false);
 			
@@ -178,7 +179,7 @@ void UTitleWidget::LaunchPawn()
 			NextLevel = true;
 			Pawn->GetMovementComponent()->Velocity = FVector(20000.0, 0.0, 0.0);
 			Pawn->EffectOn();
-
+			
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &UTitleWidget::AttachCamera, 1.f, false);
 		}
 	}
@@ -190,6 +191,7 @@ void UTitleWidget::AttachCamera()
 	APlayerTitlePawn* Pawn = Cast<APlayerTitlePawn>(PlayerController->GetPawn());
 	if (PlayerController && Pawn)
 	{
+		TRACE_BOOKMARK(TEXT("Switch Camera Replace"));
 		Pawn->GetCamera()->AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("root"));
 		Pawn->GetCamera()->SetActorLocation(FVector(15500, 0, 250));
 	}

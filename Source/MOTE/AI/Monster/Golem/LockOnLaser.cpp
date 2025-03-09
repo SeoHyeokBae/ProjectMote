@@ -69,7 +69,6 @@ void ALockOnLaser::UpdateLength(float Deltatime)
 	float Length = 0.f;
 	
 	mTotalAcc += Deltatime;
-
 	if (bHit)
 	{
 		Length = (HitResult.TraceStart - HitResult.Location).Length();
@@ -97,11 +96,9 @@ void ALockOnLaser::UpdateLength(float Deltatime)
 			}
 		}
 	}
-
-		if(Length == 0.f)
-			Length = (HitResult.TraceStart - HitResult.TraceEnd).Length();
-
-		if (mTotalAcc - mLockOnAcc >= mMissTargetTime && !mIsFinish)
+	else
+	{
+		if (mTotalAcc >= mMissTargetTime && !mIsFinish)
 		{
 			mIsFinish = true;
 			mIsLockOn = false;
@@ -116,6 +113,10 @@ void ALockOnLaser::UpdateLength(float Deltatime)
 				}
 			}
 		}
+	}
+
+	if (Length == 0.f)
+		Length = (HitResult.TraceStart - HitResult.TraceEnd).Length();
 
 	float Scale = Length / CylinerSize;
 	mMesh->SetRelativeScale3D(FVector(Scale, 0.9f, 0.9f));

@@ -63,11 +63,7 @@ void AMonsterSpawner::SpawnRandomLocation()
 	{
 		FVector BaseLocation = GetActorLocation(); // 또는 플레이어 위치, 특정 포인트 등
 
-		// 랜덤 위치를 찾기 위한 반경
-		mSpawnRadius = 5000.0f;
-
 		// 함수가 반환하는 랜덤 위치값
-		// FNavLocation.Location 
 		FNavLocation RandomLocation;
 		
 		// 네비게이션 데이터가 있는지 확인합니다.
@@ -75,9 +71,6 @@ void AMonsterSpawner::SpawnRandomLocation()
 		{
 			// 스폰 파라미터 설정
 			FActorSpawnParameters SpawnParams;
-
-
-			//RandomLocation.Location += FVector((RandomLocation.Location - PlayerCharacter->GetPlanetGravityDir()).Normalize() * 5000.0f);
 
 			// 스폰 위치가 중첩되어 충돌을 피하도록 위치를 조정하여 스폰
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -98,13 +91,11 @@ void AMonsterSpawner::SpawnRandomLocation()
 				AMonsterController* contrl = Cast<AMonsterController>(mSpawnActor->GetController());
 				contrl->SetGenericTeamId(FGenericTeamId(10));
 
-				// LightElemental 일시 스폰이펙트
-				if (Cast<ALightElemental>(mSpawnActor))
-				{
-					SpawnTransform.SetLocation(RandomLocation.Location + FVector(0, 0, 150));
-					SpawnTransform.SetScale3D(FVector(4, 4, 4));
-					UGameplayStatics::SpawnEmitterAtLocation(mSpawnActor->GetWorld(), ElementalSpawnEffect, SpawnTransform);
-				}
+				// 스폰이펙트
+				SpawnTransform.SetLocation(RandomLocation.Location + FVector(0, 0, 150));
+				SpawnTransform.SetScale3D(FVector(4, 4, 4));
+				UGameplayStatics::SpawnEmitterAtLocation(mSpawnActor->GetWorld(), ElementalSpawnEffect, SpawnTransform);
+				
 			}
 		}
 	}

@@ -62,7 +62,6 @@ AGolemMeteor::AGolemMeteor()
 	mAttackDmg = 10.f;
 }
 
-// Called when the game starts or when spawned
 void AGolemMeteor::BeginPlay()
 {
 	Super::BeginPlay();

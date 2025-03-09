@@ -31,6 +31,7 @@ void AMeteorSpawnActor::Tick(float DeltaTime)
 	{
 		mTimeAcc = 0.f;
 		SpawnRandomLocationNoNav();
+		//SpawnRandomLocation();
 		++mCount;
 	}
 
@@ -54,13 +55,16 @@ void AMeteorSpawnActor::SpawnRandomLocation()
 
 	if (NavSystem)
 	{
-		FVector BaseLocation = GetActorLocation(); // 또는 플레이어 위치, 특정 포인트 등
+		//AMotePlayerController* MoteController2 = Cast<AMotePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		//APlayerCharacter* PlayerCharacter2 = Cast<APlayerCharacter>(MoteController2->GetCharacter());
+		//FVector BaseLocation = PlayerCharacter2->GetActorLocation(); // 또는 플레이어 위치, 특정 포인트 등
+
+		FVector BaseLocation = GetActorLocation();
 
 		// 랜덤 위치를 찾기 위한 반경
-		float Radius = 6000.0f;
+		float Radius = 10000.0f;
 
 		// 함수가 반환하는 랜덤 위치값
-		// FNavLocation.Location 
 		FNavLocation RandomLocation;
 
 		// 네비게이션 데이터가 있는지 확인
@@ -75,9 +79,9 @@ void AMeteorSpawnActor::SpawnRandomLocation()
 			if (MoteController)
 			{
 				APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(MoteController->GetCharacter());
-				if (PlayerCharacter->GetGravityDirection() != FVector(0.f,0.f,-1.0f) )
+				if (PlayerCharacter && PlayerCharacter->GetGravityDirection() != FVector(0.f,0.f,-1.0f) )
 				{
-					RandomLocation.Location += FVector((RandomLocation.Location - PlayerCharacter->GetGravityDirection()).Normalize() * 5000.0f);
+					RandomLocation.Location += FVector(PlayerCharacter->GetGravityDirection().Normalize()) * 10000.0f;
 				}
 				else
 				{
@@ -93,10 +97,7 @@ void AMeteorSpawnActor::SpawnRandomLocation()
 
 			// 액터 스폰
 			AGolemMeteor* SpawnedActor = GetWorld()->SpawnActor<AGolemMeteor>(ActorToSpawn, SpawnTransform, SpawnParams);
-			if (CustomTimeDilation == 2.f)
-			{
-				SpawnedActor->CustomTimeDilation = FMath::FRandRange(1.5f, 2.f);
-			}
+
 		}
 	}
 }
@@ -108,24 +109,8 @@ void AMeteorSpawnActor::SpawnRandomLocationNoNav()
 	FVector Origin = GetActorLocation(); // 기준 위치
 	float Radius = 5000.0f;
 
-	// 랜덤 위치 계산 (공중 포함)
+	// 랜덤 위치 계산
 	FVector RandomLocation = Origin + FMath::VRand() * Radius;
-
-	// 중력 방향 체크
-	AMotePlayerController* MoteController = Cast<AMotePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
-	if (MoteController)
-	{
-		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(MoteController->GetCharacter());
-		if (PlayerCharacter->GetGravityDirection() != FVector(0.f, 0.f, -1.0f))
-		{
-			RandomLocation += FVector((PlayerCharacter->GetGravityDirection()).Normalize());
-		}
-		else
-		{
-			RandomLocation.Z += 3000.0f;
-		}
-	}
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -135,3 +120,5 @@ void AMeteorSpawnActor::SpawnRandomLocationNoNav()
 
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, SpawnTransform, SpawnParams);
 }
+
+

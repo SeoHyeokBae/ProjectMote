@@ -412,7 +412,7 @@ void APlayerCharacter::AimAction()
 
 	if (mIsZoom && !mAnimInstance->GetIsDash())
 	{
-
+		
 		// 조준시 블러
 		mScreenEffect->Settings.WeightedBlendables.Array[(int8)EScreenEffct::DashAttack].Weight = 1.f;
 
@@ -825,7 +825,7 @@ void APlayerCharacter::ZoomOut()
 	mIsZoom = false;
 	mAimDecalComponent->SetVisibility(false);
 
-	FInputModeGameOnly InputMode; // Capture Mouse In Vieport 
+	FInputModeGameOnly InputMode; 
 	GetController<APlayerController>()->bShowMouseCursor = false;
 	GetController<APlayerController>()->SetInputMode(InputMode);
 
@@ -1284,4 +1284,3 @@ void APlayerCharacter::Init()
 	GetCharacterMovement()->AirControl = 1.0;
 	GetCharacterMovement()->MaxAcceleration = 3072.f;
 }
-

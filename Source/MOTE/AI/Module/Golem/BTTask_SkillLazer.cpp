@@ -25,7 +25,6 @@ EBTNodeResult::Type UBTTask_SkillLazer::ExecuteTask(UBehaviorTreeComponent& Owne
 		AAIController* Control = Golem->GetController<AAIController>();
 		if (IsValid(Control))
 		{
-			//Control->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
 			bool IsStagger = Control->GetBlackboardComponent()->GetValueAsBool(TEXT("Stagger"));
 			if (IsStagger)
 			{
@@ -53,11 +52,8 @@ EBTNodeResult::Type UBTTask_SkillLazer::ExecuteTask(UBehaviorTreeComponent& Owne
 				FRotator Rot;
 				Golem->GetMesh()->GetSocketWorldLocationAndRotation("LazerSocket", Start, Rot);
 
-				//FRotator TargetRot = (PlayerLoc - Start).GetSafeNormal().Rotation();
 				FRotator TargetRot = UKismetMathLibrary::FindLookAtRotation(Start, PlayerLoc);
 				mLockOnLaser->SetActorRotation(TargetRot + FRotator(180, 0, 0));
-				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Vector: %s"), *TargetRot.ToString()));
-				//GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Blue, FString::Printf(TEXT("Vector: %s"), *Rot.ToString()));
 				mPrevRot = TargetRot;
 			}
 		}
@@ -110,19 +106,17 @@ void UBTTask_SkillLazer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	}
 
 	// 타켓 조준
-	if (mLockOnLaser )
+	if (mLockOnLaser)
 	{
 		FVector PlayerLoc;
 		APlayerCharacter* Player = Cast<APlayerCharacter>(Target);
 		if (Player)
 		{
-			mTimeAcc = 0.f;
 			PlayerLoc = Player->GetActorLocation() - Player->GetActorUpVector() * 20.f;
 			mPrevLoc = PlayerLoc;
 		}
 		else
 		{
-			mTimeAcc += DeltaSeconds;
 			PlayerLoc = mPrevLoc;
 		}
 
@@ -147,29 +141,18 @@ void UBTTask_SkillLazer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		const FRotator InterpToRotator = FMath::RInterpTo(PrevRot, TargetRot, DeltaSeconds, mRotSpeed);
 
 		
-		// 락온 실패가 아니라면 계속 추적
-		if (!(mLockOnLaser->IsFinish() && !mLockOnLaser->IsLockOn()))
+		if (mLockOnLaser->IsLockOn())
 		{
-			if (mLockOnLaser->IsLockOn())
-			{
-				Golem->SetLaserAimRot(TargetRot);
-			}
-			else
-			{
-				Golem->SetLaserAimRot(InterpToRotator);
-				mLockOnLaser->SetActorRotation(InterpToRotator + FRotator(180, 0, 0)); // Offset 
-			}
+			Golem->SetLaserAimRot(TargetRot);
 		}
+		else if (!mLockOnLaser->IsFinish() && !mLockOnLaser->IsLockOn())
+		{
+			Golem->SetLaserAimRot(InterpToRotator);
+			mLockOnLaser->SetActorRotation(InterpToRotator + FRotator(180, 0, 0)); 
+		}
+
 		mPrevRot = InterpToRotator;
 	}
-
-	//if (!Target && mTimeOver < mTimeAcc)
-	//{
-	//	if (mLockOnLaser)
-	//		mLockOnLaser->Destroy();
-
-	//	Golem->SetGolemAnim(EGolemState::Skill_Lazer);
-	//}
 
 	// 공격끝났는지 판단
 	bool CanAttack = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsBool(TEXT("CanAttack"));

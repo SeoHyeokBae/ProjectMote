@@ -192,6 +192,7 @@ void UTargetSystemComponent::ChangeLockOnTargetForTurnValue(float TurnValue)
 		LastTimeChangeTarget = GetWorld()->GetRealTimeSeconds();
 	}
 
+	// 타켓 재설정
 	EnableCameraLock();
 }
 
@@ -243,7 +244,7 @@ void UTargetSystemComponent::UpdateDynamicCameraLock(float DeltaTime)
 	{
 		if (IsValid(Target) && mPlayerOwner->GetDistanceTo(Target) <= DetectionRange)
 		{
-			// Target이 살아있는 동안 카메라가 Target을 바라보도록 고정합니다.
+			// Target이 살아있는 동안 카메라가 Target을 바라보도록 고정
 			AAIMonsterBase* Monster = Cast<AAIMonsterBase>(Target);
 			if (IsValid(Monster) && Monster->GetAIType() != EAIType::Death && mPlayerController)
 			{
@@ -263,7 +264,7 @@ void UTargetSystemComponent::UpdateDynamicCameraLock(float DeltaTime)
 			}
 			else
 			{
-				// Target이 사망했을 경우 다음 Target을 찾습니다.
+				// Target이 사망했을 경우 다음 Target
 				CancelLockOnTarget();
 				ExecuteLockOnTarget();
 			}
@@ -352,7 +353,6 @@ TArray<AActor*> UTargetSystemComponent::SearchTargetableActors(bool bInScreenPos
 	TArray<FHitResult> HitResults;
 	TArray<AActor*> TargetableActors;
 
-	// ECollisionChannel::ECC_GameTraceChannel2는 TraceChannels의 Targeting을 나타냅니다.
 	bool bIsHit = GetWorld()->SweepMultiByChannel(HitResults, PlayerLocation, PlayerLocation, FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel7, FCollisionShape::MakeSphere(DetectionRange));
 	if (bIsHit)
@@ -450,8 +450,6 @@ AActor* UTargetSystemComponent::FindDirectionalTarget(ETargetDirection NewTarget
 				NewTarget = GetTargetByDotProduct(LeftTargetableActors, false);
 			}
 			break;
-		default:
-			break;
 		}
 	}
 	// LockOn일 경우
@@ -483,8 +481,6 @@ AActor* UTargetSystemComponent::FindDirectionalTarget(ETargetDirection NewTarget
 				// 왼쪽에서 내적이 가장 작은 Target
 				NewTarget = GetTargetByDotProduct(LeftTargetableActors, false);
 			}
-			break;
-		default:
 			break;
 		}
 	}

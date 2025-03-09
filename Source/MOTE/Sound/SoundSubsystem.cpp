@@ -90,7 +90,6 @@ void USoundSubsystem::PlayBGM(const FName& SoundName, float VolumeMultiplier, fl
                 {
                     // 사망시 백그라운드로 재생될 이펙트사운드볼륨 조절 
 					UGameplayStatics::SetSoundMixClassOverride(GetWorld(), mSoundMix, VFXSoundClass, VFXVolume * 0.2f);
-					//UGameplayStatics::PushSoundMixModifier(GetWorld(), mSoundMix);
                 }
             }
             

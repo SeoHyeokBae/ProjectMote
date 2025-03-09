@@ -16,18 +16,12 @@ class MOTE_API UGolemAnimNotifyStateLazer : public UAnimNotifyState
 	
 protected:
 	UPROPERTY()
-	class AGolem* Golem;
-	//TWeakObjectPtr<class AGolem> Golem;
-
-	UPROPERTY()
 	UNiagaraSystem* mChargeEffect;
 	UPROPERTY()
 	UNiagaraSystem* mBeamEffect;
 	UPROPERTY()
 	UNiagaraSystem* mGroundEffect;
 
-	//UPROPERTY()
-	//UNiagaraComponent* mBeamComponent;
 	TWeakObjectPtr<UNiagaraComponent> mBeamComponent;
 
 	FRotator mPrevRot;

@@ -51,9 +51,7 @@ void AGolem::SetGolemAnim(EGolemState Type)
 		break;
 	case EGolemState::Stagger:
 	{
-		//mGolemAnim->EndNotifyStates();
 		mGolemAnim->PlayStaggerMontage();
-		//ClearEffects();
 		break;
 	}
 	case EGolemState::Death:

@@ -271,5 +271,4 @@ private:
 	void Create();
 	void Load();
 	void Init();
-
 };
