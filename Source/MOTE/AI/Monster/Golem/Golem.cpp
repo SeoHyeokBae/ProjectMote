@@ -112,7 +112,7 @@ float AGolem::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 {
     DamageAmount = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (mStagger <= 0.f && mState != EGolemState::Death)
+	if (mStagger <= 0.f && mState != EGolemState::Stagger && mState != EGolemState::Death)
 	{
 		mState = EGolemState::Stagger;
 		SetGolemAnim(EGolemState::Stagger);
