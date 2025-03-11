@@ -38,14 +38,6 @@ void UTargetSystemComponent::BeginPlay()
 	Super::BeginPlay();
 
 	InitializePlayerReference();
-
-	/*APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwner());
-	
-	if (IsValid(Player))
-		mPlayer = Player;
-
-	mPlayerController = Cast<AMotePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));*/
-
 }
 
 

@@ -5,7 +5,6 @@
 
 void UGolemAnimNotifyShake::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, FString(TEXT("Monster In Shake")));
 }
 
 void UGolemAnimNotifyShake::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)

@@ -24,8 +24,6 @@ EBTNodeResult::Type UBTTask_GolemBasicAttack::ExecuteTask(UBehaviorTreeComponent
 		AAIController* Control = Golem->GetController<AAIController>();
 		if (IsValid(Control))
 		{
-			//Control->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
-			
 			bool IsStagger = Control->GetBlackboardComponent()->GetValueAsBool(TEXT("Stagger"));
 			if(IsStagger)
 			{
@@ -92,7 +90,6 @@ void UBTTask_GolemBasicAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 
 		Golem->SetGolemAnim(EGolemState::Idle);
 
-		//OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
 		return;
 	}
 }

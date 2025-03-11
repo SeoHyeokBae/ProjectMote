@@ -166,9 +166,6 @@ void ALightElemental::CreatePortal()
 		FVector Translation = FVector(400.f, 5000.f, 400.0f);
 		FVector Scale = FVector(1.0f, 1.0f, 1.0f);
 
-		// 포탈 생성 위치
-		// 과정: 플레이어 바라보는방향 으로 생성하니까 옆으로 공격하면서 몬스터를 잡으니까 화면에안보임
-		// 화면에 보이게하고싶어 카메라 방향으로 위치를 잡아줌
 		AAIController* MonsterController = Cast<AAIController>(GetController());
 		if (MonsterController)
 		{

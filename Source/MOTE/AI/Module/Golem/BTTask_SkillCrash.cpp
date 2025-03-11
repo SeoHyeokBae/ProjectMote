@@ -25,8 +25,6 @@ EBTNodeResult::Type UBTTask_SkillCrash::ExecuteTask(UBehaviorTreeComponent& Owne
 		AAIController* Control = Golem->GetController<AAIController>();
 		if (IsValid(Control))
 		{
-			//Control->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
-
 			bool IsStagger = Control->GetBlackboardComponent()->GetValueAsBool(TEXT("Stagger"));
 			if (IsStagger)
 			{
@@ -45,7 +43,6 @@ void UBTTask_SkillCrash::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
 
-	// AIPawn�� ���´�.
 	AGolem* Golem = OwnerComp.GetAIOwner()->GetPawn<AGolem>();
 
 	if (!IsValid(Golem))
@@ -56,19 +53,6 @@ void UBTTask_SkillCrash::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 
 		return;
 	}
-
-
-	// Target�� ���´�.
-	//AActor* Target = Cast<AActor>(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
-
-	//if (!Target)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-
-	//	Golem->SetGolemAnim(EGolemState::Idle);
-
-	//	return;
-	//}
 
 	AAIController* Control = Golem->GetController<AAIController>();
 	if (IsValid(Control))
@@ -84,7 +68,6 @@ void UBTTask_SkillCrash::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		}
 	}
 
-	// ���ݳ������� �Ǵ�
 	bool CanAttack = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsBool(TEXT("CanAttack"));
 	if (!CanAttack)
 	{
@@ -92,7 +75,6 @@ void UBTTask_SkillCrash::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 
 		Golem->SetGolemAnim(EGolemState::Idle);
 
-		//OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
 		return;
 	}
 

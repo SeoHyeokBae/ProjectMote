@@ -35,8 +35,6 @@ void ADmgTextActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//EndLocation = GetActorLocation() + FVector(-30.f, FMath::RandRange(-300, 300), -70.f);
-	
 	StartLocation = GetActorLocation();
 	EndLocation = GetActorLocation() + FVector(0.f, 0.f, -70.f);
 	IncreaseEndLocation = GetActorLocation()+FVector(30.0,30.0, 70.0);
@@ -92,11 +90,6 @@ void ADmgTextActor::ChangeColor(FLinearColor NewColor)
 
 void ADmgTextActor::TimeLineUpdate(float Alpha)
 {
-	//FVector NewLocation;
-	//NewLocation.X = FMath::Lerp(StartLocation.X, EndLocation.X, Alpha);
-	//NewLocation.Y = FMath::Lerp(StartLocation.Y, EndLocation.Y, Alpha);
-	//NewLocation.Z = StartLocation.Z + FMath::Sin(Alpha * PI * FREQUENCY) * AMPLITUDE;
-
 	TimeAcc += GetWorld()->GetDeltaSeconds();
 	FVector NewLocation;
 	if(IsIncrease)
@@ -117,6 +110,3 @@ void ADmgTextActor::TimeLineFinish()
 {
 	Destroy();
 }
-// 처음에 커브로했다가 x,y값도 커브에 영향을받아 원하는느낌이안남 (x,y는 1:1커브로 하고싶음)
-// 그래서 커브는 1:1 선형그래프로하고 z값만 변경
-//NewLocation = FMath::Lerp(StartLocation, EndLocation, Alpha);

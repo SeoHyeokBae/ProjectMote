@@ -143,26 +143,11 @@ void APlayerTrailFX::Tick(float DeltaTime)
 			mDashLifeTime = 0.f;
 		}
 	}
-
-	//if (IsValid(mFloatFXComponent))
-	//{
-	//	if (mFloatFXComponent->IsActive())
-	//	{
-	//		mFloatLifeTime += DeltaTime;
-	//	}
-
-	//	if (mFloatLifeTime > 1.f)
-	//	{
-	//		mFloatFXComponent->Deactivate();
-	//		mFloatLifeTime = 0.f;
-	//	}
-	//}
 }
 
 
 void APlayerTrailFX::DestroyComponent(UNiagaraComponent* Component)
 {
-	// 자주 사용하지 않는 이펙트 사용 할 때 해당 함수 사용
 	if (!IsValid(Component))
 		return;
 

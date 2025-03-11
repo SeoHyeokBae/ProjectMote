@@ -13,8 +13,6 @@ UBTTask_CoolDown::UBTTask_CoolDown()
 
 EBTNodeResult::Type UBTTask_CoolDown::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	//WaitTime = 3.0f; 
-	//RandomDeviation = 0.5f;
 	Super::ExecuteTask(OwnerComp, NodeMemory); 
 
 	return EBTNodeResult::InProgress; 

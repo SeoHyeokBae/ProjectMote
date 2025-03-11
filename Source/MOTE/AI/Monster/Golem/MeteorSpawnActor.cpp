@@ -55,10 +55,6 @@ void AMeteorSpawnActor::SpawnRandomLocation()
 
 	if (NavSystem)
 	{
-		//AMotePlayerController* MoteController2 = Cast<AMotePlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-		//APlayerCharacter* PlayerCharacter2 = Cast<APlayerCharacter>(MoteController2->GetCharacter());
-		//FVector BaseLocation = PlayerCharacter2->GetActorLocation(); // 또는 플레이어 위치, 특정 포인트 등
-
 		FVector BaseLocation = GetActorLocation();
 
 		// 랜덤 위치를 찾기 위한 반경

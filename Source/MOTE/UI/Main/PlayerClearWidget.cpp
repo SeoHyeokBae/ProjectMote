@@ -4,6 +4,7 @@
 #include "UI/Main/PlayerClearWidget.h"
 #include "Controller/MotePlayerController.h"
 #include "GameMode/MainGameMode.h"
+#include "../../Sound/SoundSubsystem.h"
 
 void UPlayerClearWidget::NativeConstruct()
 {
@@ -70,11 +71,23 @@ void UPlayerClearWidget::ExitButtonClick()
 void UPlayerClearWidget::ReStartButtonHover()
 {
 	SelectReStart->SetVisibility(ESlateVisibility::Visible);
+
+	USoundSubsystem* SoundSubsystem = GetGameInstance()->GetSubsystem<USoundSubsystem>();
+	if (SoundSubsystem)
+	{
+		SoundSubsystem->PlayVFXSound(TEXT("UIBottonHover"));
+	}
 }
 
 void UPlayerClearWidget::ExitButtonHover()
 {
 	SelectExit->SetVisibility(ESlateVisibility::Visible);
+
+	USoundSubsystem* SoundSubsystem = GetGameInstance()->GetSubsystem<USoundSubsystem>();
+	if (SoundSubsystem)
+	{
+		SoundSubsystem->PlayVFXSound(TEXT("UIBottonHover"));
+	}
 }
 
 void UPlayerClearWidget::ReStartButtonUnhover()

@@ -17,10 +17,10 @@ void UGolemAnimNotifyAttackCollision::NotifyBegin(USkeletalMeshComponent* MeshCo
 		mHitEffect = NiagaraAttackAsset;
 
 	mGolem = Cast<AGolem>(MeshComp->GetOwner());
-	if(mGolem)
-	{
-		mGolem->AddToRoot();
-	}
+	//if(mGolem)
+	//{
+	//	mGolem->AddToRoot();
+	//}
 }
 
 void UGolemAnimNotifyAttackCollision::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
@@ -107,70 +107,6 @@ void UGolemAnimNotifyAttackCollision::NotifyTick(USkeletalMeshComponent* MeshCom
 					UNiagaraFunctionLibrary::SpawnSystemAtLocation(mGolem->GetWorld(), mHitEffect, Hit.ImpactPoint);
 					break;
 				}
-				//if (HitPlayer && !DamagedActors.Contains(HitPlayer)) // 이미 데미지를 준 액터는 무시
-				//{
-				//	USoundSubsystem* ExPlosionSFX = mGolem->GetGameInstance()->GetSubsystem<USoundSubsystem>();
-				//	if (ExPlosionSFX)
-				//	{
-
-				//		ExPlosionSFX->PlayVFXSound(TEXT("BossHit"), 0.7f, Hit.ImpactPoint);
-				//	}
-
-
-				//	// 데미지 적용
-				//	mGolem->HitStopStart();
-
-				//	FDamageEvent DmgEvent;
-				//	HitPlayer->TakeDamage(mGolem->mAttack, DmgEvent, mGolem->GetController(), mGolem);
-
-				//	// 공격에서 Launch 적용
-				//	if (mGolem->GetGolemState() == EGolemState::Attack)
-				//	{
-				//		FVector LaunchDirection;
-
-				//		if (HitPlayer->GetPlanetGravityDir() != FVector(0.0f, 0.0f, -1.0f))
-				//		{
-				//			float PlayerHeight = abs(FVector::DotProduct(HitPlayer->GetActorLocation(), HitPlayer->GetGravityDirection()));
-				//			float ImpactHeight = abs(FVector::DotProduct(Hit.ImpactPoint, HitPlayer->GetGravityDirection()));
-
-				//			if (PlayerHeight < ImpactHeight)
-				//			{
-				//				float DeltaHeight = ImpactHeight - PlayerHeight;
-				//				LaunchDirection = (HitPlayer->GetActorLocation() - (DeltaHeight + 25.f) * HitPlayer->GetPlanetGravityDir() - Hit.ImpactPoint).GetSafeNormal();
-				//				LaunchDirection += mGolem->GetActorForwardVector() * 0.5;
-				//			}
-				//			else
-				//			{
-				//				LaunchDirection = (HitPlayer->GetActorLocation() - Hit.ImpactPoint).GetSafeNormal();
-				//			}
-				//		}
-				//		else
-				//		{
-				//			if (HitPlayer->GetActorLocation().Z < Hit.ImpactPoint.Z)
-				//			{
-				//				LaunchDirection = (FVector(HitPlayer->GetActorLocation().X - Hit.ImpactPoint.X,
-				//					HitPlayer->GetActorLocation().Y - Hit.ImpactPoint.Y, 15.f)).GetSafeNormal();
-
-				//				LaunchDirection += mGolem->GetActorForwardVector() * 0.5;
-				//			}
-				//			else
-				//			{
-				//				LaunchDirection = (HitPlayer->GetActorLocation() - Hit.ImpactPoint).GetSafeNormal();
-				//			}
-				//		}
-
-				//		HitPlayer->LaunchCharacter(LaunchDirection * 3000.f, true, true);
-				//	}
-
-				//	// 데미지 받은 액터 저장
-				//	DamagedActors.Add(HitPlayer);
-
-				//	// 이 액터에 다시 데미지를 줄 수 있도록 타이머 설정
-				//	//mGolem->GetWorld()->GetTimerManager().SetTimer(DamageResetTimerHandle, this, &APlayerCharacter::ResetDamagedActors, DamageResetTime, false);
-
-				//// 이펙트 스폰
-				//	UNiagaraFunctionLibrary::SpawnSystemAtLocation(mGolem->GetWorld(), mHitEffect, Hit.ImpactPoint);
-				//}
 			}
 			HitResults.Empty();
 		}
@@ -182,16 +118,10 @@ void UGolemAnimNotifyAttackCollision::NotifyEnd(USkeletalMeshComponent* MeshComp
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 	IsAlreadyHit = false;
-	//if (!DamagedActors.IsEmpty())
-	//{
-	//	DamagedActors.Empty();
-	//}
 	
-	
-	// 객체가 더 이상 유효하지 않다면 참조 해제
 	if (mGolem)
 	{
-		mGolem->RemoveFromRoot();  // 작업이 끝나면 루트 집합에서 제거
+		//mGolem->RemoveFromRoot();
 		mGolem = nullptr;
 	}
 }

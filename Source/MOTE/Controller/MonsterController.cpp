@@ -142,12 +142,6 @@ void AMonsterController::OnTargetDetect(AActor* Target, FAIStimulus Stimulus)
 
 void AMonsterController::OnTargetForget(AActor* Target)
 {
-	/*
-	DefaultEngine.ini
-	[/Script/AIModule.AISystem]
-	bForgetStaleActors=True
-	*/
-
 	AActor* CurrentTarget = Cast<AActor>(Blackboard->GetValueAsObject(TEXT("Target")));
 	if (CurrentTarget == Target)
 	{

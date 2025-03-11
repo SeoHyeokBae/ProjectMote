@@ -4,10 +4,8 @@
 #include "Portal.h"
 #include "../Sound/SoundSubsystem.h"
 
-// Sets default values
 APortal::APortal()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	mPortal = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Portal"));
@@ -52,7 +50,6 @@ APortal::APortal()
 	mPortal->OnComponentEndOverlap.AddDynamic(this, &APortal::EndOverlap);
 }
 
-// Called when the game starts or when spawned
 void APortal::BeginPlay()
 {
 	Super::BeginPlay();
@@ -65,7 +62,6 @@ void APortal::BeginPlay()
 	mPortalParticleComp = UGameplayStatics::SpawnEmitterAttached(mPortalGolem, mPortal, NAME_None, FVector(0.0, 0.0, 0.0), FRotator(0.0, 0.0, 0.0), FVector(1.5, 1.5, 1.5), EAttachLocation::KeepRelativeOffset, true);
 }
 
-// Called every frame
 void APortal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

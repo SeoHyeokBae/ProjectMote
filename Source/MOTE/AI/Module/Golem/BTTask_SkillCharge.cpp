@@ -54,19 +54,6 @@ void UBTTask_SkillCharge::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		return;
 	}
 
-
-	//// Target을 얻어온다.
-	//AActor* Target = Cast<AActor>(OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
-
-	//if (!Target)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
-
-	//	Golem->SetGolemAnim(EGolemState::Idle);
-
-	//	return;
-	//}
-
 	AAIController* Control = Golem->GetController<AAIController>();
 	if (IsValid(Control))
 	{
@@ -89,7 +76,6 @@ void UBTTask_SkillCharge::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 
 		Golem->SetGolemAnim(EGolemState::Idle);
 
-		//OwnerComp.GetAIOwner()->GetBlackboardComponent()->SetValueAsBool(TEXT("CanAttack"), false);
 		return;
 	}
 

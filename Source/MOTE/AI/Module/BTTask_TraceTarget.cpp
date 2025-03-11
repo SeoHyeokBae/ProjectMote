@@ -52,8 +52,6 @@ void UBTTask_TraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 
-		//AIPawn->SetAIType(EAIType::Idle);
-
 		return;
 	}
 
@@ -66,15 +64,6 @@ void UBTTask_TraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 		AIPawn->SetAIType(EAIType::Idle);
 		return;
 	}
-
-	//float Dist = OwnerComp.GetAIOwner()->GetBlackboardComponent()->GetValueAsFloat(TEXT("Distance"));
-	//if (Dist > 280.f)
-	//{
-	//	FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
-
-	//	AIPawn->SetAIType(EAIType::Idle);
-	//	return;
-	//}
 
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 }

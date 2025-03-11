@@ -9,7 +9,6 @@ ABaseWeapon::ABaseWeapon()
 	PrimaryActorTick.bCanEverTick = true;
 
 	mRoot = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	//mMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	mMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	mBasePoint = CreateDefaultSubobject<UArrowComponent>(TEXT("BaseArrow"));
 	mTipPoint = CreateDefaultSubobject<UArrowComponent>(TEXT("TipArrow"));
@@ -23,12 +22,6 @@ ABaseWeapon::ABaseWeapon()
 	mBasePoint->SetRelativeRotation(FRotator(90.0, 90.0, 0.0));
 	mTipPoint->SetRelativeLocation(FVector(-225.0, 0.0, 25.0));
 	mTipPoint->SetRelativeRotation(FRotator(90.0, 90.0, 0.0));
-
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>
-	//	MeshAsset(TEXT("/Script/Engine.SkeletalMesh'/Game/KoreanTraditionalMartialArts/Meshs/Weapons/Meshs/SKM_Hwando.SKM_Hwando'"));
-
-	//if (MeshAsset.Succeeded())
-	//	mMesh->SetSkeletalMeshAsset(MeshAsset.Object);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
 		MeshAsset(TEXT("/Script/Engine.StaticMesh'/Game/Weapons/EnergySword/CyberpunkKatana/source/CyberSword/CyberSword.CyberSword'"));

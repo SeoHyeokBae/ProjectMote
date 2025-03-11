@@ -250,12 +250,6 @@ void APlayerCharacter::MoveAction(const FInputActionValue& Value)
 	
 	FVector Axis = Value.Get<FVector>();
 
-	/*FVector Forward = UKismetMathLibrary::GetForwardVector(FRotator(0, GetControlRotation().Yaw, 0));
-	FVector Right = UKismetMathLibrary::GetRightVector(FRotator(0, GetControlRotation().Yaw, 0));
-
-	AddMovementInput(Forward, Axis.Y);
-	AddMovementInput(Right, Axis.X);*/
-
 	FRotator GravityRelativeRotation = AMotePlayerController::GetGravityRelativeRotation(GetControlRotation(), GetCharacterMovement()->GetGravityDirection());
 
 	FVector Right = UKismetMathLibrary::GetRightVector(

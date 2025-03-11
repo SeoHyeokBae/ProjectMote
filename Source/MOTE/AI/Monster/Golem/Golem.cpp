@@ -290,13 +290,9 @@ void AGolem::Init()
 
 	GetCapsuleComponent()->SetCapsuleHalfHeight(1250.f);
 	GetCapsuleComponent()->SetCapsuleRadius(700.f);
-	//GetCapsuleComponent()->SetSimulatePhysics(true);
 	GetCapsuleComponent()->SetHiddenInGame(true);
-	//GetCapsuleComponent()->SetMassOverrideInKg(NAME_None, 5000.f);
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("GolemCapsule"));
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel7, ECR_Block);
-
-	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	GetMesh()->SetRelativeLocation(FVector(0.0, 0.0, -2740.0));
 	GetMesh()->SetRelativeRotation(FRotator(0.0, -90.0, 0.0));
@@ -306,7 +302,6 @@ void AGolem::Init()
 	GetMesh()->SetWalkableSlopeOverride(SlopeOverride);
 	GetMesh()->SetCollisionProfileName(TEXT("CharacterMesh"));
 
-	//mTargetAimSystem->SetupAttachment(RootComponent);
 
 	mAIType = EAIType::Boss;
 }

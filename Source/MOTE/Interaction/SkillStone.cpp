@@ -10,10 +10,8 @@
 #include "NiagaraSystemWidget.h"
 #include "NiagaraUIComponent.h"
 
-// Sets default values
 ASkillStone::ASkillStone()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	mCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
@@ -67,7 +65,6 @@ ASkillStone::ASkillStone()
 
 }
 
-// Called when the game starts or when spawned
 void ASkillStone::BeginPlay()
 {
 	Super::BeginPlay();
@@ -80,7 +77,6 @@ void ASkillStone::BeginPlay()
 		mSkillStoneFXSystem, mCapsuleComponent, NAME_None, FVector(0.0, 0.0, 0.0), FRotator(0.0, 0.0, 0.0), EAttachLocation::KeepRelativeOffset, true);
 }
 
-// Called every frame
 void ASkillStone::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
