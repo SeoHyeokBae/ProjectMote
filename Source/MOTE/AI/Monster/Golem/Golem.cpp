@@ -227,6 +227,12 @@ void AGolem::DeathDelegate()
 {
 	if (mAIType == EAIType::Death)
 	{
+		AAIController* Control = GetController<AAIController>();
+		if (Control)
+		{
+			Control->GetBlackboardComponent()->SetValueAsBool(CBossGolemKey::mStagger, true);
+		}
+
 		SetGolemAnim(EGolemState::Death);
 	}
 }

@@ -308,6 +308,7 @@ void AMotePlayerController::VisibleClearWidget()
 	{
 		mClearWidget->SetVisibility(ESlateVisibility::Visible);
 		mClearWidget->AppearWidget();
+		mClearWidget->bIsFocusable = true;
 
 		FInputModeUIOnly InputModeData;
 		InputModeData.SetWidgetToFocus(mClearWidget->TakeWidget());

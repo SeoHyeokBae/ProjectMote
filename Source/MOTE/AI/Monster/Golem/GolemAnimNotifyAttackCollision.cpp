@@ -17,10 +17,10 @@ void UGolemAnimNotifyAttackCollision::NotifyBegin(USkeletalMeshComponent* MeshCo
 		mHitEffect = NiagaraAttackAsset;
 
 	mGolem = Cast<AGolem>(MeshComp->GetOwner());
-	//if(mGolem)
-	//{
-	//	mGolem->AddToRoot();
-	//}
+	if(mGolem)
+	{
+		mGolem->AddToRoot();
+	}
 }
 
 void UGolemAnimNotifyAttackCollision::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
@@ -121,7 +121,7 @@ void UGolemAnimNotifyAttackCollision::NotifyEnd(USkeletalMeshComponent* MeshComp
 	
 	if (mGolem)
 	{
-		//mGolem->RemoveFromRoot();
+		mGolem->RemoveFromRoot();
 		mGolem = nullptr;
 	}
 }

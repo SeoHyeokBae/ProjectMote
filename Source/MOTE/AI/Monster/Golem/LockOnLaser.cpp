@@ -53,6 +53,18 @@ void ALockOnLaser::Tick(float Deltatime)
 
 void ALockOnLaser::UpdateLength(float Deltatime)
 {
+	AGolem* Golem = Cast<AGolem>(GetOwner());
+	if (!Golem)
+	{
+		return;
+	}
+	else if (Golem->GetGolemState() == EGolemState::Death)
+	{
+		mMesh->SetRelativeScale3D(FVector(0.f, 0.f, 0.f));
+		Destroy();
+		return;
+	}
+
 	if (mStartTime < 0.4f)
 	{
 		mStartTime += Deltatime;
@@ -83,15 +95,11 @@ void ALockOnLaser::UpdateLength(float Deltatime)
 				mIsFinish = true;
 				mIsLockOn = true;
 				mLockOnAcc = mLockOnTime;
-				AGolem* Golem = Cast<AGolem>(GetOwner());
-				if (Golem)
+				UGolemAnimInstance* Anim = Cast<UGolemAnimInstance>(Golem->GetMesh()->GetAnimInstance());
+				if (Anim)
 				{
-					UGolemAnimInstance* Anim = Cast<UGolemAnimInstance>(Golem->GetMesh()->GetAnimInstance());
-					if (Anim)
-					{
-						Golem->SetGolemAnim(EGolemState::Skill_Lazer);
-						Destroy();
-					}
+					Golem->SetGolemAnim(EGolemState::Skill_Lazer);
+					Destroy();
 				}
 			}
 		}
@@ -102,15 +110,11 @@ void ALockOnLaser::UpdateLength(float Deltatime)
 		{
 			mIsFinish = true;
 			mIsLockOn = false;
-			AGolem* Golem = Cast<AGolem>(GetOwner());
-			if (Golem)
+			UGolemAnimInstance* Anim = Cast<UGolemAnimInstance>(Golem->GetMesh()->GetAnimInstance());
+			if (Anim)
 			{
-				UGolemAnimInstance* Anim = Cast<UGolemAnimInstance>(Golem->GetMesh()->GetAnimInstance());
-				if (Anim)
-				{
-					Golem->SetGolemAnim(EGolemState::Skill_Lazer);
-					Destroy();
-				}
+				Golem->SetGolemAnim(EGolemState::Skill_Lazer);
+				Destroy();
 			}
 		}
 	}

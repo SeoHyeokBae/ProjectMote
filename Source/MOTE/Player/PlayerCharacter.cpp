@@ -129,18 +129,16 @@ void APlayerCharacter::BeginPlay()
 		if (MapName == "Tutorial")
 #endif
 		{
-			// 튜토리얼 레벨
-			AMotePlayerController * Control = GetController<AMotePlayerController>();
-			UMainWidget* MainWidget = Control->GetMainWidget();
-			if (MainWidget)
-			{
-				mGuide = true;
-				MainWidget->ShowGuide();
-			}
-
 			FTimerHandle TimerHandle;
 			GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this, SoundSubsystem]()
 				{
+					AMotePlayerController* Control = GetController<AMotePlayerController>();
+					UMainWidget* MainWidget = Control->GetMainWidget();
+					if (MainWidget)
+					{
+						mGuide = true;
+						MainWidget->ShowGuide();
+					}
 					SoundSubsystem->PlayVFXSound(TEXT("SpawnTutorial"), 0.5f, GetActorLocation());
 				}, 1.0f, false);
 		}
@@ -528,9 +526,9 @@ void APlayerCharacter::ExecuteLockOnAction()
 void APlayerCharacter::BossKill()
 {
 	if (!mTargetingSystem->GetTarget()) return;
-	//FDamageEvent	DmgEvent;
-	//mTargetingSystem->GetTarget()->TakeDamage(100, DmgEvent, GetController(), this);
-	mState->SetHP(10.f);
+	FDamageEvent	DmgEvent;
+	mTargetingSystem->GetTarget()->TakeDamage(100, DmgEvent, GetController(), this);
+	//mState->SetHP(10.f);
 }
 
 void APlayerCharacter::ShowGuide()
